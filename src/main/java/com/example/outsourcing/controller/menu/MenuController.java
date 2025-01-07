@@ -1,4 +1,4 @@
-package com.example.outsourcing.controller;
+package com.example.outsourcing.controller.menu;
 
 import com.example.outsourcing.dto.menu.response.MenuResponse;
 import com.example.outsourcing.service.menuService.MenuService;

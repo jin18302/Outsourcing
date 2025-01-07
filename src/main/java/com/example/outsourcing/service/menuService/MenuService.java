@@ -1,7 +1,7 @@
 package com.example.outsourcing.service.menuService;
 
 import com.example.outsourcing.dto.menu.response.MenuResponse;
-import com.example.outsourcing.repository.MenuRepository;
+import com.example.outsourcing.repository.menu.MenuRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
