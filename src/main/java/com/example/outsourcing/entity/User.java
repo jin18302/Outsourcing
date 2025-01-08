@@ -23,6 +23,9 @@ public class User {
     @Column(name = "address")
     private String address;
 
+    @Enumerated(EnumType.STRING)
+    private UserRole userRole;
+
     @Column(name = "is_deleted")
     private boolean isDeleted = false;
 
