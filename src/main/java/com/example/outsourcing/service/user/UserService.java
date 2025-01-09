@@ -5,7 +5,9 @@ import com.example.outsourcing.dto.user.request.UserChangePasswordRequest;
 import com.example.outsourcing.dto.user.request.UserChangeProfileRequest;
 import com.example.outsourcing.dto.user.request.UserDeleteRequest;
 import com.example.outsourcing.dto.user.response.UserResponse;
+import com.example.outsourcing.entity.Store;
 import com.example.outsourcing.entity.User;
+import com.example.outsourcing.repository.store.StoreRepository;
 import com.example.outsourcing.repository.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -13,12 +15,15 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.List;
+
 @Transactional(readOnly = true)
 @Service
 @RequiredArgsConstructor
 public class UserService {
 
     private final UserRepository userRepository;
+    private final StoreRepository storeRepository;
     private final PasswordEncoder passwordEncoder;
 
     public UserResponse findById(Long userId) {
@@ -66,7 +71,9 @@ public class UserService {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "비밀번호가 일치하지 않습니다.");
         }
 
+        List<Store> myStores = storeRepository.findMyStoresByUserId(userId);
         user.delete();
+        myStores.forEach(Store::delete);
     }
 
     public User getUserById(Long userId) {
