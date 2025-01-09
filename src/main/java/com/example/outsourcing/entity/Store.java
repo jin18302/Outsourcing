@@ -35,24 +35,32 @@ public class Store {
         this.minAmount = minAmount;
     }
 
-    public void updateName(String name) {
-        this.name = name;
-    }
+    public void updateDetails(
+            String name,
+            String address,
+            String open,
+            String close,
+            Integer minAmount
+    ) {
+        if (name != null) {
+            this.name = name;
+        }
 
-    public void updateAddress(String address) {
-        this.address = address;
-    }
+        if (address != null) {
+            this.address = address;
+        }
 
-    public void updateOpen(LocalTime open) {
-        this.open = open;
-    }
+        if (open != null) {
+            this.open = LocalTime.parse(open);
+        }
 
-    public void updateClose(LocalTime close) {
-        this.close = close;
-    }
+        if (close != null) {
+            this.close = LocalTime.parse(close);
+        }
 
-    public void updateMinAmount(int minAmount) {
-        this.minAmount = minAmount;
+        if (minAmount != null) {
+            this.minAmount = minAmount;
+        }
     }
 
     public void delete() {
