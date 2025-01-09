@@ -2,11 +2,12 @@ package com.example.outsourcing.entity;
 
 import com.example.outsourcing.dto.menu.request.UpdateMenuRequest;
 import jakarta.persistence.*;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Entity
-@Table(name ="menus")
+@Getter
 @NoArgsConstructor
+@Entity @Table(name ="menus")
 public class Menu {
 
     @Id
@@ -14,17 +15,32 @@ public class Menu {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "store")
+    @JoinColumn(name = "store_id")
     private Store store;
 
     @Column(name ="name")
-    private  String name;
+    private String name;
 
     @Column(name = "price")
-    private  Integer price;
+    private Long price;
+
+    @Column(name = "is_delete")
+    private boolean isDelete = false;
 
 
-    public void update(UpdateMenuRequest updateMenuRequest){
+    public Menu(Store store, String name, Long price){
+        this.store = store;
+        this.name = name;
+        this.price = price;
+    }
 
+
+    public void update(String name, Long price){
+        this.name = name;
+        this.price = price;
+    }
+
+    public void delete(){
+        this.isDelete = true;
     }
 }

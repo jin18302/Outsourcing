@@ -1,5 +1,6 @@
 package com.example.outsourcing.config;
 
+import jakarta.security.auth.message.AuthException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.core.MethodParameter;
 import org.springframework.lang.Nullable;
@@ -16,7 +17,7 @@ public class AuthUserArgumentResolver implements HandlerMethodArgumentResolver {
         boolean isAuthUserType = parameter.getParameterType().equals(AuthUser.class);
 
         if (hasAuthAnnotation != isAuthUserType) {
-            throw new AuthException("@Auth와 AuthUser 타입은 함께 사용되어야 합니다.");
+            throw new RuntimeException("@Auth와 AuthUser 타입은 함께 사용되어야 합니다.");
         }
 
         return hasAuthAnnotation;

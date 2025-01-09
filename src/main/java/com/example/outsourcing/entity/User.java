@@ -1,5 +1,6 @@
 package com.example.outsourcing.entity;
 
+import com.example.outsourcing.dto.auth.SignupRequest;
 import jakarta.persistence.*;
 import lombok.Getter;
 
@@ -43,5 +44,23 @@ public class User {
 
     public void delete() {
         this.isDeleted = true;
+    }
+
+    public User() {
+    }
+
+    private User(String email,String address , String name, String password) {
+        this.email = email;
+        this.address = address;
+        this.name =  name;
+        this.password = password;
+    }
+
+    public static User from(SignupRequest request) {
+        return new User(
+                request.getEmail(),
+                request.getAddress(),
+                request.getName(),
+                request.getPassword());
     }
 }

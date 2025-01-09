@@ -50,7 +50,7 @@ public class JwtUtil {
         if (StringUtils.hasText(tokenValue) && tokenValue.startsWith(BEARER_PREFIX)) {
             return tokenValue.substring(7);
         }
-        throw new ServerException("토큰을 찾을수 없습니다.");
+        throw new RuntimeException("토큰을 찾을수 없습니다.");
     }
 
     public Claims extractClaims(String token) {
