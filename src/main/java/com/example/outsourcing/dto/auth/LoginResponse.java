@@ -1,22 +1,13 @@
 package com.example.outsourcing.dto.auth;
 
-import com.example.outsourcing.entity.User;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
 @Getter
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class LoginResponse {
 
-    private Long id;
-    private String email;
-    private String address;
+    private final String token;
 
-    public static LoginResponse from(User user) {
-        return new LoginResponse(
-                user.getId(),
-                user.getEmail(),
-                user.getAddress()
-        );
-    }
 }

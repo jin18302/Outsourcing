@@ -19,8 +19,8 @@ public class Review {
     private Store store;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "order_id")
-    private Order order;
+    @JoinColumn(name = "purchases_id")
+    private Purchases purchases;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
@@ -32,9 +32,9 @@ public class Review {
     @Column(name = "rating")
     private int rating;
 
-    public Review(Store store, Order order, User user, String contents, int rating) {
+    public Review(Store store, Purchases purchases, User user, String contents, int rating) {
         this.store = store;
-        this.order = order;
+        this.purchases = purchases;
         this.user = user;
         this.contents = contents;
         this.rating=rating;

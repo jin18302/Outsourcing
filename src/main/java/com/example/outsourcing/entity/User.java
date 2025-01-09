@@ -13,6 +13,7 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     @Column(unique = true, name = "email")
     private String email;
 
@@ -35,8 +36,15 @@ public class User {
         this.password = password;
     }
 
-    public void updateName(String name) {
-        this.name = name;
+    public void updateProfile(String name, String address) {
+
+        if (name != null) {
+            this.name = name;
+        }
+
+        if (address != null) {
+            this.address = address;
+        }
     }
 
     public void updateAddress(String address) {

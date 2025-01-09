@@ -1,12 +1,12 @@
 package com.example.outsourcing.service.review;
 
 
+import com.example.outsourcing.common.status.PurchasesStatus;
 import com.example.outsourcing.dto.review.request.CreateReviewRequest;
 import com.example.outsourcing.dto.review.request.UpdateReviewRequest;
 import com.example.outsourcing.dto.review.response.ReviewResponse;
-import com.example.outsourcing.entity.Review;
-import com.example.outsourcing.entity.Store;
-import com.example.outsourcing.entity.User;
+import com.example.outsourcing.entity.*;
+import com.example.outsourcing.repository.purchases.PurchasesRepository;
 import com.example.outsourcing.repository.review.ReviewRepository;
 import com.example.outsourcing.service.store.StoreService;
 import com.example.outsourcing.service.user.UserService;
@@ -25,7 +25,7 @@ import org.springframework.web.server.ResponseStatusException;
 public class ReviewService {
 
     private final ReviewRepository reviewRepository;
-    private final OrderRepository orderRepository;
+    private final PurchasesRepository PurchasesRepository;
     private final UserService userService;
     private final StoreService storeService;
 
@@ -34,19 +34,22 @@ public class ReviewService {
 
         User user = userService.getUserById(userId);
 
-        Order order = orderRepository.findById(createReviewRequest.getOrderId()).
+        Purchases purchases = PurchasesRepository.findById(createReviewRequest.getPurchasesId()).
                 orElseThrow(() -> new ResponseStatusException((HttpStatus.NOT_FOUND), "주문정보를 찾을 수 없습니다."));
 
-        if (order.getUser().getId() != userId) {
+        if (purchases.getUser().getId() != userId ) {
+            System.out.println(userId);
+            System.out.println(purchases.getUser().getId());
+            System.out.println(purchases.getUser().getName());
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "로그인된 아이디와 주문자의 아이디가 다릅니다. 해킹이 의심됩니다.");
         }
 
-        if (order.getOrderStatus().equals(OrderStatus.배달완료)) {
+        if (purchases.getOrderStatus().equals(PurchasesStatus.배달완료)) {
             Store store = storeService.getStoreById(createReviewRequest.getStoreId());
 
             Review review = new Review(
                     store,
-                    order,
+                    purchases,
                     user,
                     createReviewRequest.getContents(),
                     createReviewRequest.getRating());

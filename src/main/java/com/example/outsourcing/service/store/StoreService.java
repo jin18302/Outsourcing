@@ -6,7 +6,9 @@ import com.example.outsourcing.dto.store.response.StoreListResponse;
 import com.example.outsourcing.dto.store.response.StoreResponse;
 import com.example.outsourcing.dto.store.response.StoreSaveResponse;
 import com.example.outsourcing.entity.Store;
+import com.example.outsourcing.entity.User;
 import com.example.outsourcing.repository.store.StoreRepository;
+import com.example.outsourcing.service.user.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -24,6 +26,7 @@ import java.util.Objects;
 @RequiredArgsConstructor
 public class StoreService {
 
+    private final UserService userService;
     private final StoreRepository storeRepository;
 
     @Transactional
@@ -35,7 +38,10 @@ public class StoreService {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "가게는 최대 3개까지만 운영할 수 있습니다.");
         }
 
+        User user = userService.getUserById(userId);
+
         Store newStore = new Store(
+                user,
                 request.getName(),
                 request.getAddress(),
                 request.getOpen(),
@@ -69,13 +75,13 @@ public class StoreService {
     public Page<StoreListResponse> findByName(String name, int page, int size) {
 
         Pageable pageable = PageRequest.of(page-1, size);
-        Page<Store> storeList = storeRepository.findByName(name, pageable);
+        Page<Store> storeList = storeRepository.findAllByName(name, pageable);
 
         return storeList.map(StoreListResponse::from);
     }
 
     public List<StoreListResponse> findMyStore(Long userId) {
-        return storeRepository.findByUserId(userId)
+        return storeRepository.findMyStoresByUserId(userId)
                 .stream()
                 .map(StoreListResponse::from)
                 .toList();
@@ -90,25 +96,13 @@ public class StoreService {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "본인의 가게만 수정할 수 있습니다.");
         }
 
-        if (request.getName() != null) {
-            store.updateName(request.getName());
-        }
-
-        if (request.getAddress() != null) {
-            store.updateAddress(request.getAddress());
-        }
-
-        if (request.getOpen() != null) {
-            store.updateOpen(request.getOpen());
-        }
-
-        if (request.getClose() != null) {
-            store.updateClose(request.getClose());
-        }
-
-        if (request.getMinAmount() != null) {
-            store.updateMinAmount(request.getMinAmount());
-        }
+        store.updateDetails(
+                request.getName(),
+                request.getAddress(),
+                request.getOpen(),
+                request.getClose(),
+                request.getMinAmount()
+        );
     }
 
     @Transactional
@@ -117,7 +111,7 @@ public class StoreService {
         Store store = getStoreById(storeId);
 
         if(!Objects.equals(store.getUser().getId(), userId)) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "본인의 가게만 수정할 수 있습니다.");
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "본인의 가게만 삭제할 수 있습니다.");
         }
 
         store.delete();
