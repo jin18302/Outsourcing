@@ -36,15 +36,10 @@ public class UserService {
     public UserResponse updateProfile(Long userId, UserChangeProfileRequest request) {
         User user = getUserById(userId);
 
-        if (request.getName() != null) {
-            user.updateName(request.getName());
-        }
+        user.updateProfile(request.getName(), request.getAddress());
 
-        if (request.getAddress() != null) {
-            user.updateAddress(request.getAddress());
-        }
-
-        return new UserResponse(user.getId(), user.getEmail(), user.getName());
+        User savedUser = userRepository.save(user);
+        return new UserResponse(savedUser.getId(), savedUser.getEmail(), savedUser.getName());
     }
 
     @Transactional
