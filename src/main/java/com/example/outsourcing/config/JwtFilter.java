@@ -1,5 +1,6 @@
 package com.example.outsourcing.config;
 
+import com.example.outsourcing.common.status.UserRole;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.MalformedJwtException;

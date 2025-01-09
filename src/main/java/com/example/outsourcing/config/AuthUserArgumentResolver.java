@@ -1,5 +1,6 @@
 package com.example.outsourcing.config;
 
+import com.example.outsourcing.common.status.UserRole;
 import jakarta.security.auth.message.AuthException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.core.MethodParameter;

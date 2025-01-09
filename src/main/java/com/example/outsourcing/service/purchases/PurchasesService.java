@@ -1,6 +1,6 @@
 package com.example.outsourcing.service.purchases;
 
-import com.example.outsourcing.common.OrderStatus;
+import com.example.outsourcing.common.status.OrderStatus;
 import com.example.outsourcing.entity.Menu;
 import com.example.outsourcing.entity.Purchases;
 import com.example.outsourcing.entity.Store;
@@ -77,8 +77,9 @@ public class PurchasesService {
         Long ownerId = purchases.getUser().getId();
 
         if (ownerId.equals(userId)) {
-            purchases.updateOrderStatus(OrderStatus.주문취소);
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "권한이 존재하지 않습니다");
         }
+        purchases.updateOrderStatus(OrderStatus.주문취소);
     }
 
     public void orderStatusChange(Long userId, Long purchasesId, String orderStatus) {

@@ -35,8 +35,11 @@ public class Menu {
     }
 
 
-    public void update(String name, Long price){
+    public void updateName(String name){
         this.name = name;
+    }
+
+    public void updatePrice(Long Price){
         this.price = price;
     }
 

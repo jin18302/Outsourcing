@@ -1,6 +1,6 @@
 package com.example.outsourcing.entity;
 
-import com.example.outsourcing.common.OrderStatus;
+import com.example.outsourcing.common.status.OrderStatus;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
