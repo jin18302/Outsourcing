@@ -6,6 +6,7 @@ import com.example.outsourcing.dto.menu.response.MenuResponse;
 import com.example.outsourcing.entity.Menu;
 import com.example.outsourcing.entity.Store;
 import com.example.outsourcing.repository.menu.MenuRepository;
+import com.example.outsourcing.repository.store.StoreRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -40,6 +42,7 @@ public class MenuService {
 
 
     public void updateMenu(Long userId, UpdateMenuRequest request) {
+
         Menu menu = menuRepository.findById(request.getMenuId())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.OK, "해당메뉴는 존재하지 않습니다"));
 
@@ -47,22 +50,32 @@ public class MenuService {
 
         checkPermission(userId, storeOwnerId);
 
-        menu.update(request.getName(), request.getPrice());
+        if (request.getName() != null) {
+            menu.updateName(request.getName());
+        }
+
+        if (request.getPrice() != null) {
+            menu.updatePrice(request.getPrice());
+        }
 
     }
+
 
     public List<MenuResponse> getMenus(Long storeId) {
         List<Menu> menuList = menuRepository.findByStoreId(storeId);
 
-        List<MenuResponse> menuResponseList = menuList.stream().
+        return menuList.stream().
                 map(menu -> new MenuResponse(menu.getName(), menu.getPrice())).toList();
-
-        return menuResponseList;
     }
+
 
     public void deleteMenu(Long menuId) {
         Menu menu = menuRepository.findById(menuId)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "해당메뉴가 존재하지 않습니다"));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "해당메뉴는 존재하지 않습니다"));
+
+        if (menu.isDelete()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "이미 삭제된 메뉴입니다");
+        }
 
         menu.delete();
     }

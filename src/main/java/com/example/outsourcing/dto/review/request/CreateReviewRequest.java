@@ -7,18 +7,18 @@ import lombok.Getter;
 @Getter
 public class CreateReviewRequest {
 
-    private Long orderId;
+    private Long purchasesId;
     private Long storeId;
     private String contents;
     private int rating;
 
     @JsonCreator
     public CreateReviewRequest(
-            @JsonProperty("orderId") Long orderId,
+            @JsonProperty("purchasesId") Long purchasesId,
             @JsonProperty("storeId") Long storeId,
             @JsonProperty("contents") String contents,
             @JsonProperty("rating") int rating){
-        this.orderId=orderId;
+        this.purchasesId=purchasesId;
         this.storeId=storeId;
         this.contents=contents;
         this.rating=rating;
