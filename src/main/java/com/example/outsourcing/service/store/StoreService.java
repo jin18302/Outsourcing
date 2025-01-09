@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.time.LocalTime;
 import java.util.List;
 import java.util.Objects;
 
@@ -69,13 +70,13 @@ public class StoreService {
     public Page<StoreListResponse> findByName(String name, int page, int size) {
 
         Pageable pageable = PageRequest.of(page-1, size);
-        Page<Store> storeList = storeRepository.findByName(name, pageable);
+        Page<Store> storeList = storeRepository.findAllByName(name, pageable);
 
         return storeList.map(StoreListResponse::from);
     }
 
     public List<StoreListResponse> findMyStore(Long userId) {
-        return storeRepository.findByUserId(userId)
+        return storeRepository.findMyStoresByUserId(userId)
                 .stream()
                 .map(StoreListResponse::from)
                 .toList();
@@ -90,25 +91,13 @@ public class StoreService {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "본인의 가게만 수정할 수 있습니다.");
         }
 
-        if (request.getName() != null) {
-            store.updateName(request.getName());
-        }
-
-        if (request.getAddress() != null) {
-            store.updateAddress(request.getAddress());
-        }
-
-        if (request.getOpen() != null) {
-            store.updateOpen(request.getOpen());
-        }
-
-        if (request.getClose() != null) {
-            store.updateClose(request.getClose());
-        }
-
-        if (request.getMinAmount() != null) {
-            store.updateMinAmount(request.getMinAmount());
-        }
+        store.updateDetails(
+                request.getName(),
+                request.getAddress(),
+                request.getOpen(),
+                request.getClose(),
+                request.getMinAmount()
+        );
     }
 
     @Transactional
@@ -117,7 +106,7 @@ public class StoreService {
         Store store = getStoreById(storeId);
 
         if(!Objects.equals(store.getUser().getId(), userId)) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "본인의 가게만 수정할 수 있습니다.");
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "본인의 가게만 삭제할 수 있습니다.");
         }
 
         store.delete();
