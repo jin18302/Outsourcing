@@ -8,9 +8,11 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface StoreRepository extends JpaRepository<Store, Long> {
 
+    Optional<Store> findByIdAndIsDeletedFalse(Long id);
     // 사장님 가게 몇개인지
     @Query("SELECT Count(s) FROM Store s WHERE s.user.id = :userId and s.isDeleted = false")
     int countByUserId(@Param("userId") Long userId);
@@ -21,6 +23,6 @@ public interface StoreRepository extends JpaRepository<Store, Long> {
     @Query("SELECT s FROM Store s WHERE s.name LIKE CONCAT('%', :name, '%') AND s.isDeleted = false")
     Page<Store> findByName(@Param("name") String name, Pageable pageable);
 
-    @Query("SELECT s FROM Store s JOIN FETCH s.user WHERE s.user.id = :userId")
-    List<Store> findByUserId(Long userId);
+    @Query("SELECT s FROM Store s JOIN FETCH s.user WHERE s.user.id = :userId AND s.isDeleted")
+    List<Store> findByUserId(@Param("userId") Long userId);
 }
