@@ -24,13 +24,10 @@ public class UserService {
     public UserResponse findById(Long userId) {
         User user = getUserById(userId);
 
-        if (user.isDeleted()) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND,"탈퇴한 회원입니다.");
-        }
-
         return new UserResponse(user.getId(), user.getEmail(), user.getName());
     }
 
+    @Transactional
     public UserResponse updateProfile(Long userId, UserChangeProfileRequest request) {
         User user = getUserById(userId);
 
@@ -45,6 +42,7 @@ public class UserService {
         return new UserResponse(user.getId(), user.getEmail(), user.getName());
     }
 
+    @Transactional
     public void updatePassword(Long userId, UserChangePasswordRequest request) {
         User user = getUserById(userId);
 
@@ -56,18 +54,16 @@ public class UserService {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "잘못된 비밀번호입니다.");
         }
 
-        user.updatePassword(request.getNewPassword());
+        String encodedPassword = passwordEncoder.encode(request.getNewPassword());
+        user.updatePassword(encodedPassword);
     }
 
+    @Transactional
     public void deleteUser(Long userId, UserDeleteRequest request) {
         User user = getUserById(userId);
 
         if(!passwordEncoder.matches(request.getPassword(),user.getPassword())) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "비밀번호가 일치하지 않습니다.");
-        }
-
-        if (user.isDeleted()) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "이미 탈퇴한 회원입니다.");
         }
 
         user.delete();
