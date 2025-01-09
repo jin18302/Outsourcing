@@ -5,7 +5,6 @@ import com.example.outsourcing.dto.menu.request.UpdateMenuRequest;
 import com.example.outsourcing.dto.menu.response.MenuResponse;
 import com.example.outsourcing.entity.Menu;
 import com.example.outsourcing.entity.Store;
-import com.example.outsourcing.repository.StoreRepository;
 import com.example.outsourcing.repository.menu.MenuRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
