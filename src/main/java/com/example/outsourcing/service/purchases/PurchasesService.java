@@ -8,6 +8,7 @@ import com.example.outsourcing.entity.Menu;
 import com.example.outsourcing.entity.Purchases;
 import com.example.outsourcing.entity.Store;
 import com.example.outsourcing.entity.User;
+import com.example.outsourcing.repository.menu.MenuConnector;
 import com.example.outsourcing.repository.menu.MenuRepository;
 import com.example.outsourcing.repository.purchases.PurchasesRepository;
 import com.example.outsourcing.repository.store.StoreRepository;
@@ -26,7 +27,7 @@ import java.time.LocalTime;
 public class PurchasesService {
 
     private final PurchasesRepository purchasesRepository;
-    private final MenuRepository menuRepository;
+    private final MenuConnector menuConnector;
     private final StoreRepository storeRepository;
     private final UserRepository userRepository;
 
@@ -47,8 +48,7 @@ public class PurchasesService {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "영업시간이 종료되었습니다");
         }
 
-        Menu menu = menuRepository.findById(request.getMenuId())
-                .orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND,"헤당 메뉴는 존재하지 않습니다"));
+        Menu menu = menuConnector.findById(request.getMenuId());
 
         Long totalPrice = menu.getPrice();//
 

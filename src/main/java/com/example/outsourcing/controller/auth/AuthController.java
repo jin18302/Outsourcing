@@ -1,9 +1,9 @@
 package com.example.outsourcing.controller.auth;
 
-import com.example.outsourcing.dto.auth.LoginRequest;
-import com.example.outsourcing.dto.auth.LoginResponse;
-import com.example.outsourcing.dto.auth.SignupRequest;
-import com.example.outsourcing.dto.auth.SignupResponse;
+import com.example.outsourcing.dto.auth.request.LoginRequest;
+import com.example.outsourcing.dto.auth.response.LoginResponse;
+import com.example.outsourcing.dto.auth.request.SignupRequest;
+import com.example.outsourcing.dto.auth.response.SignupResponse;
 import com.example.outsourcing.service.auth.AuthService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;

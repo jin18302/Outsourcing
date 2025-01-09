@@ -1,16 +1,15 @@
-package com.example.outsourcing.dto.auth;
+package com.example.outsourcing.dto.auth.request;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.Builder;
 import lombok.Getter;
 
 @Getter
 public class LoginRequest {
 
-    String email;
+    private final String email;
 
-    String password;
+    private final String password;
 
     @JsonCreator
     public LoginRequest(
