@@ -1,4 +1,4 @@
-package com.example.outsourcing.common.enums;
+package com.example.outsourcing.common.status;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
