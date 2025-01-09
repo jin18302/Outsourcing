@@ -1,5 +1,6 @@
 package com.example.outsourcing.dto.auth;
 
+import com.example.outsourcing.common.status.UserRole;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.Column;
@@ -16,7 +17,6 @@ public class SignupRequest {
 
     private final String address;
 
-    private final UserRole userRole;
 
     @JsonCreator
     public SignupRequest(
