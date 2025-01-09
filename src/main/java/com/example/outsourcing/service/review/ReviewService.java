@@ -1,14 +1,12 @@
 package com.example.outsourcing.service.review;
 
-import com.example.outsourcing.common.OrderStatus;
+
 import com.example.outsourcing.dto.review.request.CreateReviewRequest;
 import com.example.outsourcing.dto.review.request.UpdateReviewRequest;
 import com.example.outsourcing.dto.review.response.ReviewResponse;
-import com.example.outsourcing.entity.Order;
 import com.example.outsourcing.entity.Review;
 import com.example.outsourcing.entity.Store;
 import com.example.outsourcing.entity.User;
-import com.example.outsourcing.repository.order.OrderRepository;
 import com.example.outsourcing.repository.review.ReviewRepository;
 import com.example.outsourcing.service.store.StoreService;
 import com.example.outsourcing.service.user.UserService;

@@ -1,6 +1,6 @@
 package com.example.outsourcing.entity;
 
-import com.example.outsourcing.common.status.OrderStatus;
+import com.example.outsourcing.common.status.PurchasesStatus;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -29,13 +29,13 @@ public class Purchases {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "order_status")
-    private OrderStatus orderStatus;
+    private PurchasesStatus orderStatus;
 
     @Column(name = "total_price")
     private Long totalPrice;
 
 
-    public Purchases(Store store, Menu menu, Long price, User user, OrderStatus orderStatus){
+    public Purchases(Store store, Menu menu, Long price, User user, PurchasesStatus orderStatus){
         this.store = store;
         this.menu = menu;
         this.totalPrice = price;
@@ -43,7 +43,7 @@ public class Purchases {
         this.orderStatus = orderStatus;
     }
 
-    public void updateOrderStatus(OrderStatus orderStatus){
+    public void updateOrderStatus(PurchasesStatus orderStatus){
         this.orderStatus = orderStatus;
     }
 }

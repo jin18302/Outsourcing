@@ -44,7 +44,7 @@ public class MenuService {
     public void updateMenu(Long userId, UpdateMenuRequest request) {
 
         Menu menu = menuRepository.findById(request.getMenuId())
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.OK, "해당메뉴는 존재하지 않습니다"));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "해당메뉴는 존재하지 않습니다"));
 
         Long storeOwnerId = menu.getStore().getUser().getId();
 
@@ -83,7 +83,7 @@ public class MenuService {
 
     public void checkPermission(Long userId, Long storeOwnerId) {
         if (!userId.equals(storeOwnerId)) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "권한이 없습니다");
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "권한이 없습니다");
         }
     }
 }
