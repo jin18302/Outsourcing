@@ -6,7 +6,9 @@ import com.example.outsourcing.dto.store.response.StoreListResponse;
 import com.example.outsourcing.dto.store.response.StoreResponse;
 import com.example.outsourcing.dto.store.response.StoreSaveResponse;
 import com.example.outsourcing.entity.Store;
+import com.example.outsourcing.entity.User;
 import com.example.outsourcing.repository.store.StoreRepository;
+import com.example.outsourcing.service.user.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -16,7 +18,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.time.LocalTime;
 import java.util.List;
 import java.util.Objects;
 
@@ -25,6 +26,7 @@ import java.util.Objects;
 @RequiredArgsConstructor
 public class StoreService {
 
+    private final UserService userService;
     private final StoreRepository storeRepository;
 
     @Transactional
@@ -36,7 +38,10 @@ public class StoreService {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "가게는 최대 3개까지만 운영할 수 있습니다.");
         }
 
+        User user = userService.getUserById(userId);
+
         Store newStore = new Store(
+                user,
                 request.getName(),
                 request.getAddress(),
                 request.getOpen(),
