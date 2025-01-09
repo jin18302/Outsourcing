@@ -24,7 +24,7 @@ public class Store {
     private String address;
     private LocalTime open;
     private LocalTime close;
-    private int minAmount;
+    private Integer minAmount;
     private boolean isDeleted = false;
 
     public Store (String name, String address, LocalTime open, LocalTime close, int minAmount) {

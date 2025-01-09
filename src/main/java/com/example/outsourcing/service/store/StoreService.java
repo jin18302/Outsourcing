@@ -13,22 +13,25 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.Objects;
 
+@Transactional(readOnly = true)
 @Service
 @RequiredArgsConstructor
 public class StoreService {
 
     private final StoreRepository storeRepository;
 
+    @Transactional
     public StoreSaveResponse create(Long userId, StoreRequest request) {
 
         int storeCount = storeRepository.countByUserId(userId);
 
-        if(storeCount > 3) {
+        if(storeCount == 3) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "가게는 최대 3개까지만 운영할 수 있습니다.");
         }
 
@@ -78,13 +81,10 @@ public class StoreService {
                 .toList();
     }
 
+    @Transactional
     public void updateStore(Long userId, Long storeId, StoreUpdateRequest request) {
 
         Store store = getStoreById(storeId);
-
-        if(store.isDeleted()) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND,"폐업한 가게입니다.");
-        }
 
         if(!Objects.equals(store.getUser().getId(), userId)) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "본인의 가게만 수정할 수 있습니다.");
@@ -98,26 +98,23 @@ public class StoreService {
             store.updateAddress(request.getAddress());
         }
 
-        if (request.getAddress() != null) {
+        if (request.getOpen() != null) {
             store.updateOpen(request.getOpen());
         }
 
-        if (request.getAddress() != null) {
+        if (request.getClose() != null) {
             store.updateClose(request.getClose());
         }
 
-        if (request.getAddress() != null) {
+        if (request.getMinAmount() != null) {
             store.updateMinAmount(request.getMinAmount());
         }
     }
 
+    @Transactional
     public void deleteStore(Long userId, Long storeId) {
 
         Store store = getStoreById(storeId);
-
-        if(store.isDeleted()) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND,"폐업한 가게입니다.");
-        }
 
         if(!Objects.equals(store.getUser().getId(), userId)) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "본인의 가게만 수정할 수 있습니다.");
@@ -127,9 +124,7 @@ public class StoreService {
     }
 
     public Store getStoreById(Long storeId) {
-        return storeRepository.findById(storeId)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,"가게를 찾을 수 없습니다."))
+        return storeRepository.findByIdAndIsDeletedFalse(storeId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,"가게를 찾을 수 없습니다."));
     }
-
-
 }
