@@ -13,6 +13,7 @@ import java.util.Optional;
 public interface StoreRepository extends JpaRepository<Store, Long> {
 
     Optional<Store> findByIdAndIsDeletedFalse(Long id);
+
     // 사장님 가게 몇개인지
     @Query("SELECT Count(s) FROM Store s WHERE s.user.id = :userId and s.isDeleted = false")
     int countByUserId(@Param("userId") Long userId);
@@ -21,8 +22,8 @@ public interface StoreRepository extends JpaRepository<Store, Long> {
 
     // 검색시 이름에 들어가면 다 검색
     @Query("SELECT s FROM Store s WHERE s.name LIKE CONCAT('%', :name, '%') AND s.isDeleted = false")
-    Page<Store> findByName(@Param("name") String name, Pageable pageable);
+    Page<Store> findAllByName(@Param("name") String name, Pageable pageable);
 
-    @Query("SELECT s FROM Store s JOIN FETCH s.user WHERE s.user.id = :userId AND s.isDeleted")
-    List<Store> findByUserId(@Param("userId") Long userId);
+    @Query("SELECT s FROM Store s JOIN FETCH s.user WHERE s.user.id = :userId AND s.isDeleted = false")
+    List<Store> findMyStoresByUserId(@Param("userId") Long userId);
 }
