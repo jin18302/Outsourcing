@@ -25,7 +25,7 @@ import org.springframework.web.server.ResponseStatusException;
 public class ReviewService {
 
     private final ReviewRepository reviewRepository;
-    private final PurchasesRepository PurchasesRepository;
+    private final PurchasesRepository purchasesRepository;
     private final UserService userService;
     private final StoreService storeService;
 
@@ -34,7 +34,7 @@ public class ReviewService {
 
         User user = userService.getUserById(userId);
 
-        Purchases purchases = PurchasesRepository.findById(createReviewRequest.getPurchasesId()).
+        Purchases purchases = purchasesRepository.findById(createReviewRequest.getPurchasesId()).
                 orElseThrow(() -> new ResponseStatusException((HttpStatus.NOT_FOUND), "주문정보를 찾을 수 없습니다."));
 
         if (purchases.getUser().getId() != userId ) {
@@ -54,7 +54,7 @@ public class ReviewService {
                     createReviewRequest.getContents(),
                     createReviewRequest.getRating());
 
-            return ReviewResponse.of(reviewRepository.save(review));
+            return ReviewResponse.from(reviewRepository.save(review));
         } else {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "주문상태가 배달완료가 아닙니다.");
         }
@@ -75,7 +75,7 @@ public class ReviewService {
         if (updateReviewRequest.getRating() != 0) {
             review.updateRating(updateReviewRequest.getRating());
         }
-        return ReviewResponse.of(review);
+        return ReviewResponse.from(review);
     }
 
     public Page<ReviewResponse> findReviewByUserId(Long userId, String rating, int pageNumber) {
@@ -90,7 +90,7 @@ public class ReviewService {
         String[] ratingData = rating.split("-");
 
 
-        return ReviewResponse.of(reviewRepository.findReviewByUserId(
+        return ReviewResponse.from(reviewRepository.findReviewByUserId(
                 userId,
                 Integer.parseInt(ratingData[0]),
                 Integer.parseInt(ratingData[1]),
@@ -109,7 +109,7 @@ public class ReviewService {
         String[] ratingData = rating.split("-");
 
 
-        return ReviewResponse.of(reviewRepository.findReviewByStoreId(
+        return ReviewResponse.from(reviewRepository.findReviewByStoreId(
                 storeId,
                 Integer.parseInt(ratingData[0]),
                 Integer.parseInt(ratingData[1]),
