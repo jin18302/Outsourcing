@@ -1,10 +1,11 @@
 package com.example.outsourcing.entity;
 
+import com.example.outsourcing.common.status.OrderStatus;
 import jakarta.persistence.*;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "orders")
+@Table
 @NoArgsConstructor
 public class Order {
 

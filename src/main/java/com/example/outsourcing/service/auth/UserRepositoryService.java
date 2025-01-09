@@ -9,4 +9,6 @@ public interface UserRepositoryService {
    User findByEmail(String email);
 
    User save(User user);
+
+   User findByName(String email);
 }

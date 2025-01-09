@@ -31,4 +31,12 @@ public class UpdateReviewRequest {
         this.rating=0;
     }
 
+    @JsonCreator
+    public UpdateReviewRequest(
+            @JsonProperty("reviewId") Long reviewId,
+            @JsonProperty("contents") int rating
+    ){
+        this.reviewId=reviewId;
+        this.rating=rating;
+    }
 }

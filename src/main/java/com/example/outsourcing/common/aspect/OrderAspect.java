@@ -1,4 +1,4 @@
-package com.example.outsourcing.config;
+package com.example.outsourcing.common.aspect;
 
 import com.example.outsourcing.dto.order.response.OrderResponse;
 import lombok.extern.slf4j.Slf4j;

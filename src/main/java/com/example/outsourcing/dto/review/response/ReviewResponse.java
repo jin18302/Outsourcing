@@ -18,7 +18,7 @@ public class ReviewResponse {
         return new ReviewResponse(
                 review.getUser().getName(),
                 review.getStore().getName(),
-                review.getOrder().getMenu().getName(),
+                review.getPurchases().getMenu().getName(),
                 review.getContents(),
                 review.getRating()
                 );

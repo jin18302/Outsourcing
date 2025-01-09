@@ -1,14 +1,17 @@
 package com.example.outsourcing.service.auth;
 
 import com.example.outsourcing.entity.User;
+import com.example.outsourcing.repository.LunaticRepository;
 import com.example.outsourcing.repository.user.UserRepository;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-@Service
-@AllArgsConstructor
+
+@RequiredArgsConstructor
 public class UserRepositoryServiceImpl implements UserRepositoryService{
-    UserRepository userRepository;
+
+    private final UserRepository userRepository;
 
     @Override
     public User findByEmail(String email) {
@@ -18,5 +21,10 @@ public class UserRepositoryServiceImpl implements UserRepositoryService{
     @Override
     public User save(User user) {
         return userRepository.save(user);
+    }
+
+    @Override
+    public User findByName(String email) {
+        return userRepository.findByName(email).orElseThrow(()->new RuntimeException("나 못찾아부려"));
     }
 }
