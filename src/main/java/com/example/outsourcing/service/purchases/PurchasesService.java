@@ -1,6 +1,6 @@
 package com.example.outsourcing.service.purchases;
 
-import com.example.outsourcing.common.OrderStatus;
+import com.example.outsourcing.common.status.OrderStatus;
 import com.example.outsourcing.entity.Menu;
 import com.example.outsourcing.entity.Purchases;
 import com.example.outsourcing.entity.Store;
