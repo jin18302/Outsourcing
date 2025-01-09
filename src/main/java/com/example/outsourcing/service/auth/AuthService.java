@@ -23,9 +23,7 @@ public class AuthService {
         if (passwordEncoder.matches(loginRequest.getPassword(), user.getPassword())) {
             throw new RuntimeException("패스워드불일치익셉션");
         }
-
         return LoginResponse.from(user);
-
     }
 
     public SignupResponse signup(SignupRequest signupRequest) {
