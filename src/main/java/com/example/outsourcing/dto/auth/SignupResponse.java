@@ -1,5 +1,6 @@
 package com.example.outsourcing.dto.auth;
 
+import com.example.outsourcing.common.status.UserRole;
 import com.example.outsourcing.entity.User;
 
 public class SignupResponse {
