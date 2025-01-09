@@ -50,12 +50,12 @@ public class MenuService {
 
         checkPermission(userId, storeOwnerId);
 
-        if (request.getName() == null) {
-            menu.updatePrice(menu.getPrice());
+        if (request.getName() != null) {
+            menu.updateName(request.getName());
         }
 
-        if (request.getPrice() == null) {
-            menu.updateName(request.getName());
+        if (request.getPrice() != null) {
+            menu.updatePrice(request.getPrice());
         }
 
     }
