@@ -27,11 +27,11 @@ public class Store {
     private Integer minAmount;
     private boolean isDeleted = false;
 
-    public Store (String name, String address, LocalTime open, LocalTime close, int minAmount) {
+    public Store (String name, String address, String open, String close, int minAmount) {
         this.name = name;
         this.address = address;
-        this.open = open;
-        this.close = close;
+        this.open = LocalTime.parse(open);
+        this.close = LocalTime.parse(close);
         this.minAmount = minAmount;
     }
 
