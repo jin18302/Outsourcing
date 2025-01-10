@@ -6,7 +6,7 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.Arrays;
 
 public enum UserRole {
-    OWNER;
+    OWNER, USER;
 
     public static UserRole of(String role) {
         return Arrays.stream(UserRole.values())
