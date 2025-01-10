@@ -12,6 +12,7 @@ import org.springframework.stereotype.Repository;
 public interface ReviewRepository extends JpaRepository<Review, Long>{
 //TODO UserId와 StoreId로 리뷰를 검색하는 JPQL쿼리를 추가합니다.
 
+
     @Query("SELECT R FROM Review R JOIN FETCH R.user WHERE R.user.id = :userId AND R.rating BETWEEN :startRating AND :endRating")
     Page<Review> findReviewByUserId(@Param("userId") Long userId,
                             @Param("startRating") int startRating,
@@ -23,5 +24,6 @@ public interface ReviewRepository extends JpaRepository<Review, Long>{
                                      @Param("startRating") int startRating,
                                      @Param("endRating")  int endRating,
                                      Pageable pageable);
+
 
 }
