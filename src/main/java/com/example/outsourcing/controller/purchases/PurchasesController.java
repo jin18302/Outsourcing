@@ -25,7 +25,7 @@ public class PurchasesController {
     }
 
 
-    @PatchMapping("/{purchasesId}")
+    @DeleteMapping("/{purchasesId}")
     public ResponseEntity<PurchasesResponse> cancelPurchases(@RequestAttribute("userId") Long userId,
                                 @PathVariable(name = "purchasesId") Long purchasesId) {
 
@@ -36,7 +36,7 @@ public class PurchasesController {
     }
 
     @RequireRole("OWNER")
-    @PatchMapping("/{purchasesId}/accept")
+    @PatchMapping
     public ResponseEntity<PurchasesResponse> changePurchasesByOwner(@RequestAttribute("userId") Long userId,
                                UpdatePurchasesRequest request) {
 
