@@ -7,8 +7,7 @@ import com.example.outsourcing.dto.menu.request.UpdateMenuRequest;
 import com.example.outsourcing.dto.menu.response.MenuResponse;
 import com.example.outsourcing.entity.Menu;
 import com.example.outsourcing.entity.Store;
-import com.example.outsourcing.repository.menu.MenuConnector;
-import com.example.outsourcing.repository.store.StoreConnector;
+import com.example.outsourcing.service.store.StoreConnectorInterface;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,13 +20,13 @@ import java.util.List;
 @RequiredArgsConstructor
 public class MenuService {
 
-    private final MenuConnector menuConnector;
-    private final StoreConnector storeConnector;
+    private final MenuConnectorInterface menuConnectorInterface;
+    private final StoreConnectorInterface storeConnectorInterface;
 
     @Transactional
     public MenuResponse saveMenu(Long userId, AddMenuRequest addMenuRequest) {
 
-        Store store = storeConnector.findById(addMenuRequest.storeId());
+        Store store = storeConnectorInterface.findById(addMenuRequest.storeId());
 
         Long storeOwnerId = store.getUser().getId();
 
@@ -35,7 +34,7 @@ public class MenuService {
 
         Menu menu = Menu.from(store, addMenuRequest.name(), addMenuRequest.price());
 
-        Menu saveMenu = menuConnector.save(menu);
+        Menu saveMenu = menuConnectorInterface.save(menu);
 
         return MenuResponse.from(saveMenu.getId(), saveMenu.getName(), saveMenu.getPrice());
 
@@ -44,7 +43,7 @@ public class MenuService {
     @Transactional
     public MenuResponse updateMenu(Long userId, UpdateMenuRequest request) {
 
-        Menu menu = menuConnector.findById(request.menuId());
+        Menu menu = menuConnectorInterface.findById(request.menuId());
 
         Long storeOwnerId = menu.getStore().getUser().getId();
 
@@ -64,7 +63,7 @@ public class MenuService {
 
 
     public List<MenuResponse> getMenus(Long storeId) {
-        List<Menu> menuList = menuConnector.findByStoreId(storeId);
+        List<Menu> menuList = menuConnectorInterface.findByStoreId(storeId);
 
         return menuList.stream().
                 map(menu -> new MenuResponse(menu.getId(), menu.getName(), menu.getPrice())).toList();
@@ -73,7 +72,7 @@ public class MenuService {
 
     @Transactional
     public void deleteMenu(Long menuId) {
-        Menu menu = menuConnector.findById(menuId);
+        Menu menu = menuConnectorInterface.findById(menuId);
 
         if (menu.isDelete()) {
             throw new InvalidRequestException("이미 삭제된 메뉴입니다");
