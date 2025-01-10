@@ -4,7 +4,6 @@ import com.example.outsourcing.dto.review.request.CreateReviewRequest;
 import com.example.outsourcing.dto.review.request.UpdateReviewRequest;
 import com.example.outsourcing.dto.review.response.ReviewResponse;
 import com.example.outsourcing.service.review.ReviewService;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -40,13 +39,13 @@ public class ReviewController {
     public ResponseEntity<Page<ReviewResponse>> findReviewByStoreId(@PathVariable Long storeId,@RequestParam String Rating, @RequestParam int pageNumber){
         Page<ReviewResponse> result = reviewService.findReviewByStoreId(storeId, Rating, pageNumber);
 
-        return new ResponseEntity (result,HttpStatus.OK);
+        return new ResponseEntity<>(result,HttpStatus.OK);
     }
 
     @DeleteMapping("{reviewId}")
     public ResponseEntity<Void> removeReview(@RequestAttribute("userId") Long userId,@PathVariable Long reviewId){
         reviewService.removeReview(userId,reviewId);
-        return new ResponseEntity (HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
 }
