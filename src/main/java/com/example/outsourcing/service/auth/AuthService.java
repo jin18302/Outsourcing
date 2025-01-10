@@ -1,6 +1,7 @@
 package com.example.outsourcing.service.auth;
 
 import com.example.outsourcing.common.exception.InvalidRequestException;
+import com.example.outsourcing.common.status.UserRole;
 import com.example.outsourcing.config.JwtUtil;
 import com.example.outsourcing.config.PasswordEncoder;
 import com.example.outsourcing.dto.auth.request.LoginRequest;
@@ -48,7 +49,8 @@ public class AuthService {
         }
         String encode = passwordEncoder.encode(signupRequest.getPassword());
 
-        User user = User.from(signupRequest);
+        UserRole userRole = UserRole.of(signupRequest.getUserRole());
+        User user = User.from(signupRequest, userRole);
         user.updatePassword(encode);
         User save = userConnector.save(user);
         return SignupResponse.from(save);
