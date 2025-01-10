@@ -19,19 +19,4 @@ public record UpdateReviewRequest(
         this.rating = rating;
     }
 
-    @JsonCreator
-    public UpdateReviewRequest(
-            @JsonProperty("reviewId") Long reviewId,
-            @JsonProperty("contents") String contents
-    ) {
-        this(reviewId,contents,0);
-    }
-
-    @JsonCreator
-    public UpdateReviewRequest(
-            @JsonProperty("reviewId") Long reviewId,
-            @JsonProperty("contents") int rating
-    ) {
-        this(reviewId,null,rating);
-    }
 }
