@@ -34,7 +34,7 @@ public class PurchasesAspect {
 
             return response;
 
-        } catch (Throwable ex) {
+        } catch (Exception ex) {
             log.info("주문 처리중 오류가 발생하였습니다. 다시 시도해주세요");
 
             throw ex;
