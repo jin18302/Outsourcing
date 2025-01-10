@@ -4,14 +4,14 @@ import com.example.outsourcing.entity.Menu;
 import com.example.outsourcing.repository.menu.MenuRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
-@Service
+@Component
 @RequiredArgsConstructor
-public class MenuRepositoryConnectService {
+public class MenuRepositoryConnector {
 
     private final MenuRepository menuRepository;
 

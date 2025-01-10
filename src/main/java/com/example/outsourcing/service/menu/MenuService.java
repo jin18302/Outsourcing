@@ -14,13 +14,13 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
+
 @Service
 @Transactional
 @RequiredArgsConstructor
 public class MenuService {
 
-
-    private final MenuRepositoryConnectService menuConnectService;
+    private final MenuRepositoryConnector menuConnector;
     private final StoreRepository storeRepository;
 
 
@@ -33,17 +33,18 @@ public class MenuService {
 
         checkPermission(userId, storeOwnerId);
 
-        Menu menu = new Menu(store, addMenuRequest.name(), addMenuRequest.price());
+        Menu menu = Menu.from(store, addMenuRequest.name(), addMenuRequest.price());
 
-        Menu saveMenu = menuConnectService.saveMenu(menu);
+        Menu saveMenu = menuConnector.saveMenu(menu);
 
         return MenuResponse.from(saveMenu);
+
     }
 
 
     public MenuResponse updateMenu(Long userId, UpdateMenuRequest request) {
 
-        Menu menu = menuConnectService.findMenuById(request.menuId());
+        Menu menu = menuConnector.findMenuById(request.menuId());
 
         Long storeOwnerId = menu.getStore().getUser().getId();
 
@@ -63,15 +64,15 @@ public class MenuService {
 
 
     public List<MenuResponse> getMenus(Long storeId) {
-        List<Menu> menuList = menuConnectService.findByStoreId(storeId);
+        List<Menu> menuList = menuConnector.findByStoreId(storeId);
 
         return menuList.stream().
-                map(menu -> new MenuResponse(menu.getId(), menu.getName(), menu.getPrice())).toList();
+                map(MenuResponse::from).toList();
     }
 
 
     public void deleteMenu(Long menuId) {
-        Menu menu = menuConnectService.findMenuById(menuId);
+        Menu menu = menuConnector.findMenuById(menuId);
 
         if (menu.isDelete()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "이미 삭제된 메뉴입니다");
@@ -86,4 +87,6 @@ public class MenuService {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "권한이 없습니다");
         }
     }
+
+
 }

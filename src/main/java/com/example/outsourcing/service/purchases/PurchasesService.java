@@ -3,7 +3,7 @@ package com.example.outsourcing.service.purchases;
 import com.example.outsourcing.common.annotation.PurchasesLog;
 import com.example.outsourcing.common.status.PurchasesStatus;
 import com.example.outsourcing.dto.purchases.request.AddPurchasesRequest;
-import com.example.outsourcing.dto.purchases.request.UpdatePurchasesStatusRequest;
+import com.example.outsourcing.dto.purchases.request.UpdatePurchasesRequest;
 import com.example.outsourcing.dto.purchases.response.PurchasesResponse;
 import com.example.outsourcing.entity.Menu;
 import com.example.outsourcing.entity.Purchases;
@@ -11,7 +11,7 @@ import com.example.outsourcing.entity.Store;
 import com.example.outsourcing.entity.User;
 import com.example.outsourcing.repository.store.StoreRepository;
 import com.example.outsourcing.repository.user.UserRepository;
-import com.example.outsourcing.service.menu.MenuRepositoryConnectService;
+import com.example.outsourcing.service.menu.MenuRepositoryConnector;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -25,8 +25,8 @@ import java.time.LocalTime;
 @RequiredArgsConstructor
 public class PurchasesService {
 
-    private final PurchasesRepositoryConnectService purchasesConnectService;
-    private final MenuRepositoryConnectService menuConnectService;
+    private final PurchasesRepositoryConnector purchasesConnectService;
+    private final MenuRepositoryConnector menuConnectService;
     private final StoreRepository storeRepository;
     private final UserRepository userRepository;
 
@@ -68,7 +68,7 @@ public class PurchasesService {
     }
 
     @PurchasesLog
-    public PurchasesResponse cancelPurchasesByUser(Long userId, Long purchasesId) {
+    public PurchasesResponse cancelPurchasesByUsers(Long userId, Long purchasesId) {
 
         Purchases purchases = purchasesConnectService.findPurchasesById(purchasesId);
 
@@ -81,14 +81,12 @@ public class PurchasesService {
         purchases.updateOrderStatus(PurchasesStatus.주문취소);
 
         return PurchasesResponse.from(purchases);
-
     }
 
     @PurchasesLog
-    public PurchasesResponse changePurchasesByOwner(Long userId, UpdatePurchasesStatusRequest request) {
+    public PurchasesResponse changePurchasesByOwner(Long userId, UpdatePurchasesRequest request) {
 
         Purchases purchases = purchasesConnectService.findPurchasesById(request.purchasesId());
-
         Long ownerId = purchases.getStore().getUser().getId();
 
         if (!userId.equals(ownerId)) {

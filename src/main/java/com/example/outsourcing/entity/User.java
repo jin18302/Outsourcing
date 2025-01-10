@@ -1,7 +1,7 @@
 package com.example.outsourcing.entity;
 
 import com.example.outsourcing.common.status.UserRole;
-import com.example.outsourcing.dto.auth.SignupRequest;
+import com.example.outsourcing.dto.auth.request.SignupRequest;
 import jakarta.persistence.*;
 import lombok.Getter;
 

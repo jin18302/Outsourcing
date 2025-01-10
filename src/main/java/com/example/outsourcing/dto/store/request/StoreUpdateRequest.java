@@ -1,23 +1,14 @@
 package com.example.outsourcing.dto.store.request;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.Getter;
 
-@Getter
-public class StoreUpdateRequest {
-
-    private String name;
-    private String address;
-
-    @JsonFormat(pattern = "HH:mm")
-    private String open;
-
-    @JsonFormat(pattern = "HH:mm")
-    private String close;
-
-    private Integer minAmount;
+public record StoreUpdateRequest(
+        String name,
+        String address,
+        String open,
+        String close,
+        Integer minAmount) {
 
     @JsonCreator
     public StoreUpdateRequest(

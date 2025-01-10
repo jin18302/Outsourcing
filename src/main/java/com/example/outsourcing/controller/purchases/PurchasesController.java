@@ -1,10 +1,12 @@
 package com.example.outsourcing.controller.purchases;
 
 import com.example.outsourcing.dto.purchases.request.AddPurchasesRequest;
-import com.example.outsourcing.dto.purchases.request.UpdatePurchasesStatusRequest;
+import com.example.outsourcing.dto.purchases.request.UpdatePurchasesRequest;
 import com.example.outsourcing.dto.purchases.response.PurchasesResponse;
 import com.example.outsourcing.service.purchases.PurchasesService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -16,30 +18,30 @@ public class PurchasesController {
 
 
     @PostMapping("/{purchasesId}")
-    public PurchasesResponse createPurchases(AddPurchasesRequest request) {
+    public ResponseEntity<PurchasesResponse> createPurchases(AddPurchasesRequest request) {
         PurchasesResponse purchases = purchasesService.createPurchases(request);
-        return purchases;
+        return ResponseEntity.status(HttpStatus.OK).body(purchases);
     }
 
 
     @PostMapping("/{purchasesId}")
-    public PurchasesResponse cancelPurchases(@RequestAttribute("userId") Long userId,
+    public ResponseEntity<PurchasesResponse> cancelPurchases(@RequestAttribute("userId") Long userId,
                                 @PathVariable(name = "purchasesId") Long purchasesId) {
 
-        PurchasesResponse purchases = purchasesService.cancelPurchasesByUser(userId, purchasesId);
+        PurchasesResponse purchases = purchasesService.cancelPurchasesByUsers(userId, purchasesId);
 
-        return purchases;
+        return ResponseEntity.status(HttpStatus.OK).body(purchases);
 
     }
 
 
 
     @PostMapping
-    public PurchasesResponse changePurchasesByOwner(@RequestAttribute("userId") Long userId,
-                                UpdatePurchasesStatusRequest request) {
+    public ResponseEntity<PurchasesResponse> changePurchasesByOwner(@RequestAttribute("userId") Long userId,
+                               UpdatePurchasesRequest request) {
 
         PurchasesResponse purchases =  purchasesService.changePurchasesByOwner(userId, request);
 
-        return purchases;
+        return ResponseEntity.status(HttpStatus.OK).body(purchases);
     }
 }

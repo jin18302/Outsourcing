@@ -42,11 +42,11 @@ public class StoreService {
 
         Store newStore = new Store(
                 user,
-                request.getName(),
-                request.getAddress(),
-                request.getOpen(),
-                request.getClose(),
-                request.getMinAmount()
+                request.name(),
+                request.address(),
+                request.open(),
+                request.close(),
+                request.minAmount()
         );
         Store savedStore = storeRepository.save(newStore);
 
@@ -97,11 +97,11 @@ public class StoreService {
         }
 
         store.updateDetails(
-                request.getName(),
-                request.getAddress(),
-                request.getOpen(),
-                request.getClose(),
-                request.getMinAmount()
+                request.name(),
+                request.address(),
+                request.open(),
+                request.close(),
+                request.minAmount()
         );
     }
 

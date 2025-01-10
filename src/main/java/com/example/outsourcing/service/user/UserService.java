@@ -36,7 +36,7 @@ public class UserService {
     public UserResponse updateProfile(Long userId, UserChangeProfileRequest request) {
         User user = getUserById(userId);
 
-        user.updateProfile(request.getName(), request.getAddress());
+        user.updateProfile(request.name(), request.address());
 
         User savedUser = userRepository.save(user);
         return new UserResponse(savedUser.getId(), savedUser.getEmail(), savedUser.getName());
@@ -46,15 +46,15 @@ public class UserService {
     public void updatePassword(Long userId, UserChangePasswordRequest request) {
         User user = getUserById(userId);
 
-        if (passwordEncoder.matches(request.getNewPassword(), user.getPassword())) {
+        if (passwordEncoder.matches(request.newPassword(), user.getPassword())) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "새 비밀번호는 기존 비밀번호와 같을 수 없습니다.");
         }
 
-        if (!passwordEncoder.matches(request.getOldPassword(), user.getPassword())) {
+        if (!passwordEncoder.matches(request.oldPassword(), user.getPassword())) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "잘못된 비밀번호입니다.");
         }
 
-        String encodedPassword = passwordEncoder.encode(request.getNewPassword());
+        String encodedPassword = passwordEncoder.encode(request.newPassword());
         user.updatePassword(encodedPassword);
     }
 
@@ -62,7 +62,7 @@ public class UserService {
     public void deleteUser(Long userId, UserDeleteRequest request) {
         User user = getUserById(userId);
 
-        if(!passwordEncoder.matches(request.getPassword(),user.getPassword())) {
+        if(!passwordEncoder.matches(request.password(),user.getPassword())) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "비밀번호가 일치하지 않습니다.");
         }
 

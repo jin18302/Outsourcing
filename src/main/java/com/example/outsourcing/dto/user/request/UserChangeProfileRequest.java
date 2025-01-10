@@ -1,13 +1,18 @@
 package com.example.outsourcing.dto.user.request;
 
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
-@Getter
-@RequiredArgsConstructor
-public class UserChangeProfileRequest {
+public record UserChangeProfileRequest(
+        String name,
+        String address) {
 
-    private final String name;
-    private final String address;
-
+    @JsonCreator
+    public UserChangeProfileRequest(
+            @JsonProperty("name") String name,
+            @JsonProperty("address") String address
+    ) {
+        this.name = name;
+        this.address = address;
+    }
 }

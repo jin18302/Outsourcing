@@ -1,6 +1,5 @@
-package com.example.outsourcing.dto.auth;
+package com.example.outsourcing.dto.auth.response;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 

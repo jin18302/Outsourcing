@@ -14,7 +14,7 @@ public class ReviewResponse {
     private String contents;
     private int rating;
 
-    public static ReviewResponse of(Review review){
+    public static ReviewResponse from(Review review){
         return new ReviewResponse(
                 review.getUser().getName(),
                 review.getStore().getName(),
@@ -24,8 +24,8 @@ public class ReviewResponse {
                 );
     }
 
-    public static Page<ReviewResponse> of(Page<Review> review){
-        return review.map(ReviewResponse::of);
+    public static Page<ReviewResponse> from(Page<Review> review){
+        return review.map(ReviewResponse::from);
 
     }
 }

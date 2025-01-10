@@ -1,6 +1,7 @@
 package com.example.outsourcing.entity;
 
 
+import com.example.outsourcing.dto.menu.request.AddMenuRequest;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,7 +19,7 @@ public class Menu {
     @JoinColumn(name = "store_id")
     private Store store;
 
-    @Column(name ="name")
+    @Column(name = "name")
     private String name;
 
     @Column(name = "price")
@@ -28,29 +29,26 @@ public class Menu {
     private boolean isDelete = false;
 
 
-    public void updateName(String name){
+    public void updateName(String name) {
         this.name = name;
     }
 
-    public void updatePrice(Long price){
+    public void updatePrice(Long price) {
         this.price = price;
     }
 
-    public void delete(){
+    public void delete() {
         this.isDelete = true;
     }
 
 
-    public Menu(Store store, String name, Long price){
+    public Menu(Store store, String name, Long price) {
         this.store = store;
         this.name = name;
         this.price = price;
     }
 
-//    public static  Menu from(AddMenuRequest request){
-//        return new Menu(
-//                request.
-//                request.getName(),
-//                request.getPrice()
-//        )
+    public static Menu from(Store store, String name, Long price) {
+        return new Menu(store, name, price);
+    }
 }
