@@ -11,15 +11,12 @@ import org.springframework.web.server.ResponseStatusException;
 @RequiredArgsConstructor
 public class PurchasesConnector implements PurchasesConnectorInterface {
 
-
     private final PurchasesRepository purchasesRepository;
 
-    @Override
     public Purchases save(Purchases purchases){
         return purchasesRepository.save(purchases);
     }
 
-    @Override
     public Purchases findById(Long id){
         return purchasesRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "해당 주문은 존재하지 않습니다"));
