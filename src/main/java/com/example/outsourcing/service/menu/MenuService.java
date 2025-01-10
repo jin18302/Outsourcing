@@ -1,5 +1,7 @@
 package com.example.outsourcing.service.menu;
 
+import com.example.outsourcing.common.exception.InvalidRequestException;
+import com.example.outsourcing.common.exception.UnauthorizedException;
 import com.example.outsourcing.dto.menu.request.AddMenuRequest;
 import com.example.outsourcing.dto.menu.request.UpdateMenuRequest;
 import com.example.outsourcing.dto.menu.response.MenuResponse;
@@ -7,12 +9,9 @@ import com.example.outsourcing.entity.Menu;
 import com.example.outsourcing.entity.Store;
 import com.example.outsourcing.repository.menu.MenuConnector;
 import com.example.outsourcing.repository.store.StoreConnector;
-
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -77,7 +76,7 @@ public class MenuService {
         Menu menu = menuConnector.findById(menuId);
 
         if (menu.isDelete()) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "이미 삭제된 메뉴입니다");
+            throw new InvalidRequestException("이미 삭제된 메뉴입니다");
         }
 
         menu.delete();
@@ -86,7 +85,7 @@ public class MenuService {
 
     public void checkPermission(Long userId, Long storeOwnerId) {
         if (!userId.equals(storeOwnerId)) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "권한이 없습니다");
+            throw new UnauthorizedException("권한이 없습니다");
         }
     }
 
