@@ -26,11 +26,9 @@ public class StoreController {
     @RequireRole(value = "OWNER")
     @PostMapping
     public ResponseEntity<StoreSaveResponse> create(
-            HttpServletRequest httpRequest,
+            @RequestAttribute("userId") Long userId,
             @RequestBody StoreRequest request
     ) {
-        Long userId = (Long)httpRequest.getAttribute("userId");
-
         return ResponseEntity.status(HttpStatus.CREATED).body(storeService.create(userId, request));
     }
 
@@ -59,20 +57,17 @@ public class StoreController {
 
     @GetMapping("/mystores")
     public ResponseEntity<List<StoreListResponse>> findMyStoreList(
-            HttpServletRequest httpRequest
+            @RequestAttribute("userId") Long userId
     ) {
-        Long userId = (Long)httpRequest.getAttribute("userId");
-
         return ResponseEntity.ok(storeService.findMyStore(userId));
     }
 
     @PatchMapping("/{storeId}")
     public ResponseEntity<Void> updateStore(
-            HttpServletRequest httpRequest,
+            @RequestAttribute("userId") Long userId,
             @PathVariable Long storeId,
             @RequestBody StoreUpdateRequest request
     ) {
-        Long userId = (Long)httpRequest.getAttribute("userId");
         storeService.updateStore(userId, storeId, request);
 
         return ResponseEntity.ok().build();
@@ -80,10 +75,9 @@ public class StoreController {
 
     @DeleteMapping("/{storeId}")
     public ResponseEntity<Void> deleteStore(
-            HttpServletRequest httpRequest,
+            @RequestAttribute("userId") Long userId,
             @PathVariable Long storeId
     ) {
-        Long userId = (Long)httpRequest.getAttribute("userId");
         storeService.deleteStore(userId, storeId);
 
         return ResponseEntity.ok().build();
