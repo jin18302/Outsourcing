@@ -36,7 +36,7 @@ public class PurchasesController {
     }
 
     @RequireRole("OWNER")
-    @PatchMapping("/{purchasesId}")
+    @PatchMapping
     public ResponseEntity<PurchasesResponse> changePurchasesByOwner(@RequestAttribute("userId") Long userId,
                                UpdatePurchasesRequest request) {
 
