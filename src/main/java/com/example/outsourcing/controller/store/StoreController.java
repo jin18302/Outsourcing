@@ -63,14 +63,13 @@ public class StoreController {
     }
 
     @PatchMapping("/{storeId}")
-    public ResponseEntity<Void> updateStore(
+    public ResponseEntity<StoreResponse> updateStore(
             @RequestAttribute("userId") Long userId,
             @PathVariable Long storeId,
             @RequestBody StoreUpdateRequest request
     ) {
-        storeService.updateStore(userId, storeId, request);
 
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(storeService.updateStore(userId, storeId, request));
     }
 
     @DeleteMapping("/{storeId}")
