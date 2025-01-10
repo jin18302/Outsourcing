@@ -7,7 +7,6 @@ import com.example.outsourcing.dto.store.response.StoreListResponse;
 import com.example.outsourcing.dto.store.response.StoreResponse;
 import com.example.outsourcing.dto.store.response.StoreSaveResponse;
 import com.example.outsourcing.service.store.StoreService;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -55,6 +54,7 @@ public class StoreController {
         return ResponseEntity.ok(storeService.findByName(name, page, size));
     }
 
+    @RequireRole("OWNER")
     @GetMapping("/mystores")
     public ResponseEntity<List<StoreListResponse>> findMyStoreList(
             @RequestAttribute("userId") Long userId
@@ -62,6 +62,7 @@ public class StoreController {
         return ResponseEntity.ok(storeService.findMyStore(userId));
     }
 
+    @RequireRole("OWNER")
     @PatchMapping("/{storeId}")
     public ResponseEntity<StoreResponse> updateStore(
             @RequestAttribute("userId") Long userId,
@@ -72,6 +73,7 @@ public class StoreController {
         return ResponseEntity.ok(storeService.updateStore(userId, storeId, request));
     }
 
+    @RequireRole("OWNER")
     @DeleteMapping("/{storeId}")
     public ResponseEntity<Void> deleteStore(
             @RequestAttribute("userId") Long userId,

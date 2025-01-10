@@ -1,5 +1,6 @@
 package com.example.outsourcing.controller.purchases;
 
+import com.example.outsourcing.common.annotation.RequireRole;
 import com.example.outsourcing.dto.purchases.request.AddPurchasesRequest;
 import com.example.outsourcing.dto.purchases.request.UpdatePurchasesRequest;
 import com.example.outsourcing.dto.purchases.response.PurchasesResponse;
@@ -34,8 +35,7 @@ public class PurchasesController {
 
     }
 
-
-
+    @RequireRole("OWNER")
     @PatchMapping("/{purchasesId}/accept")
     public ResponseEntity<PurchasesResponse> changePurchasesByOwner(@RequestAttribute("userId") Long userId,
                                UpdatePurchasesRequest request) {
