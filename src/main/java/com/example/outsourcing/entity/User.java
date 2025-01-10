@@ -64,10 +64,10 @@ public class User {
 
     public static User from(SignupRequest request, UserRole userRole) {
         return new User(
-                request.getEmail(),
-                request.getAddress(),
-                request.getName(),
-                request.getPassword(),
+                request.email(),
+                request.address(),
+                request.name(),
+                request.password(),
                 userRole);
     }
 }
