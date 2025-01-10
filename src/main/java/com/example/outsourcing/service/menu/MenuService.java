@@ -5,6 +5,8 @@ import com.example.outsourcing.dto.menu.request.UpdateMenuRequest;
 import com.example.outsourcing.dto.menu.response.MenuResponse;
 import com.example.outsourcing.entity.Menu;
 import com.example.outsourcing.entity.Store;
+import com.example.outsourcing.repository.menu.MenuConnector;
+import com.example.outsourcing.repository.store.StoreConnector;
 import com.example.outsourcing.repository.store.StoreRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -20,14 +22,13 @@ import java.util.List;
 @RequiredArgsConstructor
 public class MenuService {
 
-    private final MenuRepositoryConnector menuConnector;
-    private final StoreRepository storeRepository;
+    private final MenuConnector menuConnector;
+    private final StoreConnector storeConnector;
 
 
     public MenuResponse saveMenu(Long userId, AddMenuRequest addMenuRequest) {
 
-        Store store = storeRepository.findById(addMenuRequest.storeId())
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "해당가게는 존재하지 않습니다"));
+        Store store = storeConnector.findById(addMenuRequest.storeId());
 
         Long storeOwnerId = store.getUser().getId();
 
@@ -35,7 +36,7 @@ public class MenuService {
 
         Menu menu = Menu.from(store, addMenuRequest.name(), addMenuRequest.price());
 
-        Menu saveMenu = menuConnector.saveMenu(menu);
+        Menu saveMenu = menuConnector.save(menu);
 
         return MenuResponse.from(saveMenu);
 
@@ -44,7 +45,7 @@ public class MenuService {
 
     public MenuResponse updateMenu(Long userId, UpdateMenuRequest request) {
 
-        Menu menu = menuConnector.findMenuById(request.menuId());
+        Menu menu = menuConnector.findById(request.menuId());
 
         Long storeOwnerId = menu.getStore().getUser().getId();
 
@@ -72,7 +73,7 @@ public class MenuService {
 
 
     public void deleteMenu(Long menuId) {
-        Menu menu = menuConnector.findMenuById(menuId);
+        Menu menu = menuConnector.findById(menuId);
 
         if (menu.isDelete()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "이미 삭제된 메뉴입니다");
