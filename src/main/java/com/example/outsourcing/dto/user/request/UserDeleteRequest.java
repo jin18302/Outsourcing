@@ -1,11 +1,15 @@
 package com.example.outsourcing.dto.user.request;
 
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 
-@Getter
-@RequiredArgsConstructor
-public class UserDeleteRequest {
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
-    private final String password;
+public record UserDeleteRequest(String password) {
+
+    @JsonCreator
+    public UserDeleteRequest(
+            @JsonProperty("password") String password
+    ) {
+        this.password = password;
+    }
 }
