@@ -33,7 +33,7 @@ public class AuthService {
         }
 
         // 못찾으면 찾을수없는 이메일 익셉션
-        if (passwordEncoder.matches(loginRequest.getPassword(), user.getPassword())) {
+        if (!passwordEncoder.matches(loginRequest.getPassword(), user.getPassword())) {
             throw new InvalidRequestException("비밀번호가 일치하지 않습니다.");
         }
 
