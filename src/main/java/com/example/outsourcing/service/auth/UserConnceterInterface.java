@@ -12,5 +12,4 @@ public interface UserConnceterInterface {
 
         User findByEmail(String email);
 
-
 }

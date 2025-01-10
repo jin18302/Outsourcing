@@ -37,7 +37,7 @@ public class MenuService {
 
         Menu saveMenu = menuConnector.save(menu);
 
-        return MenuResponse.from(saveMenu);
+        return MenuResponse.from(saveMenu.getId(), saveMenu.getName(), saveMenu.getPrice());
 
     }
 
@@ -58,7 +58,7 @@ public class MenuService {
             menu.updatePrice(request.price());
         }
 
-        return MenuResponse.from(menu);
+        return MenuResponse.from(menu.getId(), menu.getName(), menu.getPrice());
 
     }
 
@@ -67,7 +67,7 @@ public class MenuService {
         List<Menu> menuList = menuConnector.findByStoreId(storeId);
 
         return menuList.stream().
-                map(MenuResponse::from).toList();
+                map(menu -> new MenuResponse(menu.getId(), menu.getName(), menu.getPrice())).toList();
     }
 
 

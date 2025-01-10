@@ -16,7 +16,7 @@ public class MenuResponse {
     private final Long price;
 
 
-    public static MenuResponse from(Menu menu){
-        return new MenuResponse(menu.getId(),menu.getName(), menu.getPrice());
+    public static MenuResponse from(Long id, String name, Long price){
+        return new MenuResponse(id, name, price);
     }
 }
