@@ -54,18 +54,20 @@ public class User {
     public User() {
     }
 
-    private User(String email,String address , String name, String password) {
+    private User(String email,String address , String name, String password, UserRole userRole) {
         this.email = email;
         this.address = address;
         this.name =  name;
         this.password = password;
+        this.userRole = userRole;
     }
 
-    public static User from(SignupRequest request) {
+    public static User from(SignupRequest request, UserRole userRole) {
         return new User(
                 request.getEmail(),
                 request.getAddress(),
                 request.getName(),
-                request.getPassword());
+                request.getPassword(),
+                userRole);
     }
 }
