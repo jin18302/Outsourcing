@@ -37,7 +37,7 @@ public class ReviewService {
 
         User user = userConnector.findById(userId);
 
-        Purchases purchases = purchasesConnector.findById(createReviewRequest.getPurchasesId());
+        Purchases purchases = purchasesConnector.findById(createReviewRequest.purchasesId());
 
         if (purchases.getUser().getId() != userId) {
             System.out.println(userId);
@@ -46,18 +46,18 @@ public class ReviewService {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "로그인된 아이디와 주문자의 아이디가 다릅니다. 해킹이 의심됩니다.");
         }
 
-        if (!purchases.getOrderStatus().equals(PurchasesStatus.배달완료)) {
+        if (!purchases.getPurchasesStatus().equals(PurchasesStatus.배달완료)) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "주문상태가 배달완료가 아닙니다.");
         }
 
-        Store store = storeConnector.findById(createReviewRequest.getStoreId());
+        Store store = storeConnector.findById(createReviewRequest.storeId());
 
         Review review = new Review(
                 store,
                 purchases,
                 user,
-                createReviewRequest.getContents(),
-                createReviewRequest.getRating());
+                createReviewRequest.contents(),
+                createReviewRequest.rating());
 
         return ReviewResponse.from(reviewConnector.save(review));
 
@@ -65,16 +65,16 @@ public class ReviewService {
     }
 
     public ReviewResponse updateReview(Long userId, UpdateReviewRequest updateReviewRequest) {
-        Review review = reviewConnector.findById(updateReviewRequest.getReviewId());
+        Review review = reviewConnector.findById(updateReviewRequest.reviewId());
         if (review.getUser().getId() != userId) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "리뷰 작성자 본인만 수정할 수 있습니다.");
         }
 
-        if (updateReviewRequest.getContents() != null) {
-            review.updateContents(updateReviewRequest.getContents());
+        if (updateReviewRequest.contents() != null) {
+            review.updateContents(updateReviewRequest.contents());
         }
-        if (updateReviewRequest.getRating() != 0) {
-            review.updateRating(updateReviewRequest.getRating());
+        if (updateReviewRequest.rating() != 0) {
+            review.updateRating(updateReviewRequest.rating());
         }
         return ReviewResponse.from(review);
     }
