@@ -83,7 +83,7 @@ public class ReviewService {
 
 
         Pageable page = PageRequest.of(
-                pageNumber + 1,
+                pageNumber - 1,
                 10,
                 Sort.by(Sort.Order.desc("id")));
 
@@ -102,7 +102,7 @@ public class ReviewService {
     public Page<ReviewResponse> findReviewByStoreId(Long storeId, String rating, int pageNumber) {
 
         Pageable page = PageRequest.of(
-                pageNumber + 1,
+                pageNumber - 1,
                 10,
                 Sort.by(Sort.Order.desc("id")));
 
