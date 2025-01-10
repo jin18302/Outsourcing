@@ -16,7 +16,7 @@ public class SignupRequest {
 
     private final String address;
 
-    private final UserRole userRole;
+    private final String userRole;
 
     @JsonCreator
     public SignupRequest(
@@ -24,7 +24,7 @@ public class SignupRequest {
             @JsonProperty("password") String password,
             @JsonProperty("address") String address,
             @JsonProperty("email") String email,
-            @JsonProperty("userRole")UserRole userRole) {
+            @JsonProperty("userRole")String userRole) {
         this.name = name;
         this.password = password;
         this.address = address;
