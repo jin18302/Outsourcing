@@ -46,7 +46,7 @@ public class StoreController {
         return ResponseEntity.ok(storeService.findAll(page, size));
     }
 
-    @GetMapping
+    @GetMapping("/all")
     public ResponseEntity<Page<StoreListResponse>> findByName(
             @RequestParam String name,
             @RequestParam(defaultValue = "1") int page,
