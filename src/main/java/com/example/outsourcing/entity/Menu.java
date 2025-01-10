@@ -1,13 +1,13 @@
 package com.example.outsourcing.entity;
 
-import com.example.outsourcing.dto.menu.request.UpdateMenuRequest;
+
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
-@NoArgsConstructor
 @Entity @Table(name ="menus")
+@NoArgsConstructor
 public class Menu {
 
     @Id
@@ -28,22 +28,29 @@ public class Menu {
     private boolean isDelete = false;
 
 
-    public Menu(Store store, String name, Long price){
-        this.store = store;
-        this.name = name;
-        this.price = price;
-    }
-
-
     public void updateName(String name){
         this.name = name;
     }
 
-    public void updatePrice(Long Price){
+    public void updatePrice(Long price){
         this.price = price;
     }
 
     public void delete(){
         this.isDelete = true;
     }
+
+
+    public Menu(Store store, String name, Long price){
+        this.store = store;
+        this.name = name;
+        this.price = price;
+    }
+
+//    public static  Menu from(AddMenuRequest request){
+//        return new Menu(
+//                request.
+//                request.getName(),
+//                request.getPrice()
+//        )
 }

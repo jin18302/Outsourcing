@@ -6,14 +6,11 @@ import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-
 import java.time.LocalTime;
 
-@Aspect
+
 @Slf4j
+@Aspect
 public class PurchasesAspect {
 
     @Pointcut("@annotation(com.example.outsourcing.common.annotation.PurchasesLog)")
@@ -22,7 +19,7 @@ public class PurchasesAspect {
 
 
     @Around("serviceLog()")
-    public void orderInfoLog(ProceedingJoinPoint joinPoint) throws Throwable {
+    public PurchasesResponse orderInfoLog(ProceedingJoinPoint joinPoint) throws Throwable {
 
         try {
             Object result = joinPoint.proceed();
@@ -32,10 +29,15 @@ public class PurchasesAspect {
             Long storeId = response.getStoreId();
             Long purchasesId = response.getPurchasesId();
 
-            log.info("요청시각: " + LocalTime.now() + ", storeId: " + storeId + ",  purchasesId: " + purchasesId);
+            log.info("요청시각: " + LocalTime.now() + ", storeId: " + storeId + ",  purchasesId: " + purchasesId +
+                    "주문상태" + response.getPurchasesStatus());
+
+            return response;
 
         } catch (Throwable ex) {
-            log.info("주문 처리중 오류가 발생하였습니다. 다시 시도해주세요");//
+            log.info("주문 처리중 오류가 발생하였습니다. 다시 시도해주세요");
+
+            throw ex;
         }
     }
 }

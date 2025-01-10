@@ -3,13 +3,12 @@ package com.example.outsourcing.controller.purchases;
 import com.example.outsourcing.dto.purchases.request.AddPurchasesRequest;
 import com.example.outsourcing.dto.purchases.request.UpdatePurchasesStatusRequest;
 import com.example.outsourcing.dto.purchases.response.PurchasesResponse;
-import com.example.outsourcing.entity.Purchases;
 import com.example.outsourcing.service.purchases.PurchasesService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
-@RequestMapping("/api")
 @RestController
+@RequestMapping("/api")
 @RequiredArgsConstructor
 public class PurchasesController {
 
@@ -24,19 +23,23 @@ public class PurchasesController {
 
 
     @PostMapping("/{purchasesId}")
-    public void cancelPurchases(@RequestAttribute("userId") Long userId,
+    public PurchasesResponse cancelPurchases(@RequestAttribute("userId") Long userId,
                                 @PathVariable(name = "purchasesId") Long purchasesId) {
 
-        purchasesService.cancelPurchases(userId, purchasesId);
+        PurchasesResponse purchases = purchasesService.cancelPurchasesByUser(userId, purchasesId);
+
+        return purchases;
 
     }
 
-    @PostMapping("/{purchasesId}")
-    public void changePurchases(@RequestAttribute("userId") Long userId,
-                                @PathVariable(name = "purchasesId") Long purchasesId,
+
+
+    @PostMapping
+    public PurchasesResponse changePurchasesByOwner(@RequestAttribute("userId") Long userId,
                                 UpdatePurchasesStatusRequest request) {
 
-        purchasesService.purchasesStatusChange(userId, purchasesId, request.getPurchasesStatus());
+        PurchasesResponse purchases =  purchasesService.changePurchasesByOwner(userId, request);
 
+        return purchases;
     }
 }

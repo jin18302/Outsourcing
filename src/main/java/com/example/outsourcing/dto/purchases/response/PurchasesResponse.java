@@ -2,18 +2,33 @@ package com.example.outsourcing.dto.purchases.response;
 
 
 import com.example.outsourcing.entity.Purchases;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @Getter
+@AllArgsConstructor
 public class PurchasesResponse {
 
-    private Long purchasesId;
+    private final Long purchasesId;
 
-    private Long storeId;
+    private final Long storeId;
+
+    private final Long menuId;
+
+    private final Long userId;
+
+    private final Long totalPrice;
+
+    private final String purchasesStatus;
 
 
-    public PurchasesResponse(Purchases purchases) {
-        this.purchasesId = purchases.getId();
-        this.storeId = purchases.getStore().getId();
+    public static PurchasesResponse from(Purchases purchases) {
+        return new PurchasesResponse(
+                purchases.getId(),
+                purchases.getStore().getId(),
+                purchases.getMenu().getId(),
+                purchases.getUser().getId(),
+                purchases.getTotalPrice(),
+                purchases.getPurchasesStatus().name());
     }
 }
