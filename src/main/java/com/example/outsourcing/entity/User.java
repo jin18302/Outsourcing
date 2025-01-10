@@ -47,10 +47,6 @@ public class User {
         }
     }
 
-    public void updateAddress(String address) {
-        this.address = address;
-    }
-
     public void delete() {
         this.isDeleted = true;
     }
