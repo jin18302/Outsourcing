@@ -9,13 +9,17 @@ import org.springframework.stereotype.Component;
 public class UserConnector {
     private final UserRepository userRepository;
 
-
     public User save(User user) {
         return null;
     }
 
+    public User findById(Long userId) {
+        return userRepository.findByIdAndIsDeletedFalse(userId)
+                .orElseThrow(() -> new RuntimeException("유저없음"));
+    }
     public User findByEmail(String email) {
-        return userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("유저없음"));
+        return userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("유저없음"));
     }
 }
 
