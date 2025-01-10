@@ -7,7 +7,7 @@ import lombok.RequiredArgsConstructor;
 
 import java.time.LocalTime;
 
-
+@Getter
 public class StoreResponse {
 
     private final Long id;
