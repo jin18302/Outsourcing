@@ -38,7 +38,7 @@ public class MenuController {
     }
 
 
-    @GetMapping("/stores/{storeId}")
+    @GetMapping("menus/stores/{storeId}")
     public ResponseEntity <List<MenuResponse>> geeMenuList(@PathVariable(name = "storeId")Long storeId){
 
        List<MenuResponse> menuResponseList = menuService.getMenus(storeId);
