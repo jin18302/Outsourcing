@@ -7,25 +7,25 @@ import com.example.outsourcing.entity.Menu;
 import com.example.outsourcing.entity.Store;
 import com.example.outsourcing.repository.menu.MenuConnector;
 import com.example.outsourcing.repository.store.StoreConnector;
-import com.example.outsourcing.repository.store.StoreRepository;
-import jakarta.transaction.Transactional;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
 
 @Service
-@Transactional
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class MenuService {
 
     private final MenuConnector menuConnector;
     private final StoreConnector storeConnector;
 
-
+    @Transactional
     public MenuResponse saveMenu(Long userId, AddMenuRequest addMenuRequest) {
 
         Store store = storeConnector.findById(addMenuRequest.storeId());
@@ -42,7 +42,7 @@ public class MenuService {
 
     }
 
-
+    @Transactional
     public MenuResponse updateMenu(Long userId, UpdateMenuRequest request) {
 
         Menu menu = menuConnector.findById(request.menuId());
@@ -72,6 +72,7 @@ public class MenuService {
     }
 
 
+    @Transactional
     public void deleteMenu(Long menuId) {
         Menu menu = menuConnector.findById(menuId);
 

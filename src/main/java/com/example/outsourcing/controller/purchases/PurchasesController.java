@@ -10,21 +10,21 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/purchases")
 @RequiredArgsConstructor
 public class PurchasesController {
 
     private final PurchasesService purchasesService;
 
 
-    @PostMapping("/{purchasesId}")
+    @PostMapping
     public ResponseEntity<PurchasesResponse> createPurchases(AddPurchasesRequest request) {
         PurchasesResponse purchases = purchasesService.createPurchases(request);
         return ResponseEntity.status(HttpStatus.OK).body(purchases);
     }
 
 
-    @PostMapping("/{purchasesId}")
+    @PatchMapping("/{purchasesId}")
     public ResponseEntity<PurchasesResponse> cancelPurchases(@RequestAttribute("userId") Long userId,
                                 @PathVariable(name = "purchasesId") Long purchasesId) {
 
@@ -36,7 +36,7 @@ public class PurchasesController {
 
 
 
-    @PostMapping
+    @PatchMapping("/{purchasesId}/accept")
     public ResponseEntity<PurchasesResponse> changePurchasesByOwner(@RequestAttribute("userId") Long userId,
                                UpdatePurchasesRequest request) {
 
