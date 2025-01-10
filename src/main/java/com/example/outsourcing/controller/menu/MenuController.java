@@ -23,7 +23,8 @@ public class MenuController {
 
     @RequireRole("OWNER")
     @PostMapping("/menus")
-    public ResponseEntity<MenuResponse> saveMenu(@RequestAttribute("userId") Long userId, AddMenuRequest addMenuRequest){
+    public ResponseEntity<MenuResponse> saveMenu(@RequestAttribute("userId") Long userId,
+                                                 @RequestBody AddMenuRequest addMenuRequest){
 
         MenuResponse menuResponse = menuService.saveMenu(userId, addMenuRequest);
 
@@ -32,8 +33,9 @@ public class MenuController {
 
     @RequireRole("OWNER")
     @PatchMapping("/menus")
-    public ResponseEntity<MenuResponse> updateMenu(@RequestAttribute("userId") Long userId,
-                                           UpdateMenuRequest updateMenuRequest){
+    public ResponseEntity<MenuResponse> updateMenu(
+            @RequestAttribute("userId") Long userId,
+            @RequestBody UpdateMenuRequest updateMenuRequest){
 
         MenuResponse menuResponse = menuService.updateMenu(userId, updateMenuRequest);
 
