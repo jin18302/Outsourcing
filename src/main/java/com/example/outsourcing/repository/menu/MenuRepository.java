@@ -17,7 +17,5 @@ public interface MenuRepository extends JpaRepository<Menu, Long> {
             "SELECT m FROM Menu m JOIN FETCH m.store WHERE m.isDelete = false AND m.store.id = :storeId"
 
     )
-    public List<Menu> findByStoreId(Long storeId);
-
-
+    List<Menu> findByStoreId(Long storeId);
 }
