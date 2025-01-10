@@ -4,6 +4,7 @@ import com.example.outsourcing.dto.menu.request.AddMenuRequest;
 import com.example.outsourcing.dto.menu.request.UpdateMenuRequest;
 import com.example.outsourcing.dto.menu.response.MenuResponse;
 import com.example.outsourcing.service.menu.MenuService;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,6 +23,7 @@ public class MenuController {
 
     @PostMapping("/menus")
     public ResponseEntity<Void> saveMenu(@RequestAttribute("userId") Long userId, AddMenuRequest addMenuRequest){
+
         menuService.saveMenu(userId, addMenuRequest);
 
         return new ResponseEntity<>(HttpStatus.OK);

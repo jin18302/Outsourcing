@@ -2,12 +2,14 @@ package com.example.outsourcing.service.review;
 
 
 import com.example.outsourcing.common.status.PurchasesStatus;
+import com.example.outsourcing.dto.auth.response.SignupResponse;
 import com.example.outsourcing.dto.review.request.CreateReviewRequest;
 import com.example.outsourcing.dto.review.request.UpdateReviewRequest;
 import com.example.outsourcing.dto.review.response.ReviewResponse;
 import com.example.outsourcing.entity.*;
 import com.example.outsourcing.repository.purchases.PurchasesRepository;
 import com.example.outsourcing.repository.review.ReviewRepository;
+import com.example.outsourcing.repository.user.UserConnector;
 import com.example.outsourcing.service.store.StoreService;
 import com.example.outsourcing.service.user.UserService;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +25,7 @@ import org.springframework.web.server.ResponseStatusException;
 @Service
 @RequiredArgsConstructor
 public class ReviewService {
+    private final UserConnector userConnector;
 
     private final ReviewRepository reviewRepository;
     private final PurchasesRepository purchasesRepository;

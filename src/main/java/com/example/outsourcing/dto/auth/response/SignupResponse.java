@@ -2,7 +2,9 @@ package com.example.outsourcing.dto.auth.response;
 
 import com.example.outsourcing.common.status.UserRole;
 import com.example.outsourcing.entity.User;
+import lombok.Builder;
 import lombok.Getter;
+
 
 @Getter
 public class SignupResponse {

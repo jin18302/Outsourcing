@@ -5,6 +5,7 @@ import com.example.outsourcing.dto.auth.response.LoginResponse;
 import com.example.outsourcing.dto.auth.request.SignupRequest;
 import com.example.outsourcing.dto.auth.response.SignupResponse;
 import com.example.outsourcing.service.auth.AuthService;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,14 +20,14 @@ public class AuthController {
     AuthService authService;
 
     @PostMapping("/login")
-    public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest loginRequest) {
+    public ResponseEntity<LoginResponse> login(@Valid @RequestBody LoginRequest loginRequest) {
         LoginResponse login = authService.login(loginRequest);
         return ResponseEntity.ok(login);
     }
 
     @PostMapping("/signup")
     public ResponseEntity<SignupResponse> signup(
-            @RequestBody SignupRequest signupRequest) {
+            @Valid @RequestBody SignupRequest signupRequest) {
         SignupResponse signup = authService.signup(signupRequest);
         return ResponseEntity.ok(signup);
     }

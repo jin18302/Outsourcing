@@ -67,9 +67,9 @@ public class User {
 
     public static User from(SignupRequest request) {
         return new User(
-                request.getEmail(),
-                request.getAddress(),
-                request.getName(),
-                request.getPassword());
+                request.email(),
+                request.address(),
+                request.name(),
+                request.password());
     }
 }
