@@ -41,14 +41,7 @@ public class StoreService {
 
         User user = userService.getUserById(userId);
 
-        Store newStore = new Store(
-                user,
-                request.name(),
-                request.address(),
-                request.open(),
-                request.close(),
-                request.minAmount()
-        );
+        Store newStore = Store.from(user,request);
         Store savedStore = storeRepository.save(newStore);
 
         return new StoreSaveResponse(savedStore.getId(), savedStore.getName());
@@ -64,12 +57,7 @@ public class StoreService {
         Pageable pageable = PageRequest.of(page-1, size);
         Page<Store> storeList = storeRepository.findByIsDeletedFalse(pageable);
 
-        return storeList.map(store -> new StoreListResponse(
-                store.getId(),
-                store.getName(),
-                store.getOpen(),
-                store.getClose(),
-                store.getMinAmount()));
+        return storeList.map(StoreListResponse::from);
     }
 
 
