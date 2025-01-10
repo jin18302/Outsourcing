@@ -19,15 +19,18 @@ public class PurchasesController {
 
 
     @PostMapping
-    public ResponseEntity<PurchasesResponse> createPurchases(AddPurchasesRequest request) {
-        PurchasesResponse purchases = purchasesService.createPurchases(request);
+    public ResponseEntity<PurchasesResponse> createPurchases(
+            @RequestAttribute("userId") Long userId,
+            @RequestBody AddPurchasesRequest request) {
+        PurchasesResponse purchases = purchasesService.createPurchases(request, userId);
         return ResponseEntity.status(HttpStatus.OK).body(purchases);
     }
 
 
     @DeleteMapping("/{purchasesId}")
-    public ResponseEntity<PurchasesResponse> cancelPurchases(@RequestAttribute("userId") Long userId,
-                                @PathVariable(name = "purchasesId") Long purchasesId) {
+    public ResponseEntity<PurchasesResponse> cancelPurchases(
+            @RequestAttribute("userId") Long userId,
+            @PathVariable(name = "purchasesId") Long purchasesId) {
 
         PurchasesResponse purchases = purchasesService.cancelPurchasesByUsers(userId, purchasesId);
 
@@ -37,8 +40,9 @@ public class PurchasesController {
 
     @RequireRole("OWNER")
     @PatchMapping
-    public ResponseEntity<PurchasesResponse> changePurchasesByOwner(@RequestAttribute("userId") Long userId,
-                               UpdatePurchasesRequest request) {
+    public ResponseEntity<PurchasesResponse> changePurchasesByOwner(
+            @RequestAttribute("userId") Long userId,
+            @RequestBody UpdatePurchasesRequest request) {
 
         PurchasesResponse purchases =  purchasesService.changePurchasesByOwner(userId, request);
 
