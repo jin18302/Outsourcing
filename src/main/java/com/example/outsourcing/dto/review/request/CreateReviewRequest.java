@@ -2,16 +2,12 @@ package com.example.outsourcing.dto.review.request;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.Getter;
 
-@Getter
-public class CreateReviewRequest {
-
-    private Long purchasesId;
-    private Long storeId;
-    private String contents;
-    private int rating;
-
+public record CreateReviewRequest(
+        Long purchasesId,
+        Long storeId,
+        String contents,
+        int rating) {
     @JsonCreator
     public CreateReviewRequest(
             @JsonProperty("purchasesId") Long purchasesId,

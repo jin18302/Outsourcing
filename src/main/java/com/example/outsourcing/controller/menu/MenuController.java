@@ -4,7 +4,6 @@ import com.example.outsourcing.dto.menu.request.AddMenuRequest;
 import com.example.outsourcing.dto.menu.request.UpdateMenuRequest;
 import com.example.outsourcing.dto.menu.response.MenuResponse;
 import com.example.outsourcing.service.menu.MenuService;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,33 +13,36 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 
-@RequestMapping("/api")
+
 @RestController
+@RequestMapping("/api")
 @RequiredArgsConstructor
 public class MenuController {
 
     private final MenuService menuService;
 
+    @RequireRole("OWNER")
     @PostMapping("/menus")
-    public ResponseEntity<Void> saveMenu(@RequestAttribute("userId") Long userId, AddMenuRequest addMenuRequest){
+    public ResponseEntity<MenuResponse> saveMenu(@RequestAttribute("userId") Long userId, AddMenuRequest addMenuRequest){
 
-        menuService.saveMenu(userId, addMenuRequest);
+        MenuResponse menuResponse = menuService.saveMenu(userId, addMenuRequest);
 
-        return new ResponseEntity<>(HttpStatus.OK);
+        return ResponseEntity.status(HttpStatus.OK).body(menuResponse);
     }
 
+    @RequireRole("OWNER")
     @PatchMapping("/menus")
-    public ResponseEntity<Void> updateMenu(@RequestAttribute("userId") Long userId,
+    public ResponseEntity<MenuResponse> updateMenu(@RequestAttribute("userId") Long userId,
                                            UpdateMenuRequest updateMenuRequest){
 
-        menuService.updateMenu(userId, updateMenuRequest);
+        MenuResponse menuResponse = menuService.updateMenu(userId, updateMenuRequest);
 
-        return new ResponseEntity(HttpStatus.NO_CONTENT);
+        return ResponseEntity.status(HttpStatus.OK).body(menuResponse);
     }
 
 
-    @GetMapping("/stores/{storeId}")
-    public ResponseEntity <List<MenuResponse>> geeMenuList(@PathVariable(name = "storeId")Long storeId){
+    @GetMapping("/menus/stores/{storeId}")
+    public ResponseEntity <List<MenuResponse>> getMenuList(@PathVariable(name = "storeId")Long storeId){
 
        List<MenuResponse> menuResponseList = menuService.getMenus(storeId);
 
@@ -48,6 +50,7 @@ public class MenuController {
     }
 
 
+    @RequireRole("OWNER")
     @DeleteMapping(("/menus/{menuId}"))
     public ResponseEntity<Void> deleteMenu(@PathVariable(name ="menuId")Long menuId){
         menuService.deleteMenu(menuId);

@@ -7,7 +7,6 @@ import com.example.outsourcing.dto.store.response.StoreListResponse;
 import com.example.outsourcing.dto.store.response.StoreResponse;
 import com.example.outsourcing.dto.store.response.StoreSaveResponse;
 import com.example.outsourcing.service.store.StoreService;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -26,11 +25,9 @@ public class StoreController {
     @RequireRole(value = "OWNER")
     @PostMapping
     public ResponseEntity<StoreSaveResponse> create(
-            HttpServletRequest httpRequest,
+            @RequestAttribute("userId") Long userId,
             @RequestBody StoreRequest request
     ) {
-        Long userId = (Long)httpRequest.getAttribute("userId");
-
         return ResponseEntity.status(HttpStatus.CREATED).body(storeService.create(userId, request));
     }
 
@@ -48,7 +45,7 @@ public class StoreController {
         return ResponseEntity.ok(storeService.findAll(page, size));
     }
 
-    @GetMapping
+    @GetMapping("/all")
     public ResponseEntity<Page<StoreListResponse>> findByName(
             @RequestParam String name,
             @RequestParam(defaultValue = "1") int page,
@@ -57,33 +54,31 @@ public class StoreController {
         return ResponseEntity.ok(storeService.findByName(name, page, size));
     }
 
+    @RequireRole("OWNER")
     @GetMapping("/mystores")
     public ResponseEntity<List<StoreListResponse>> findMyStoreList(
-            HttpServletRequest httpRequest
+            @RequestAttribute("userId") Long userId
     ) {
-        Long userId = (Long)httpRequest.getAttribute("userId");
-
         return ResponseEntity.ok(storeService.findMyStore(userId));
     }
 
+    @RequireRole("OWNER")
     @PatchMapping("/{storeId}")
-    public ResponseEntity<Void> updateStore(
-            HttpServletRequest httpRequest,
+    public ResponseEntity<StoreResponse> updateStore(
+            @RequestAttribute("userId") Long userId,
             @PathVariable Long storeId,
             @RequestBody StoreUpdateRequest request
     ) {
-        Long userId = (Long)httpRequest.getAttribute("userId");
-        storeService.updateStore(userId, storeId, request);
 
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(storeService.updateStore(userId, storeId, request));
     }
 
+    @RequireRole("OWNER")
     @DeleteMapping("/{storeId}")
     public ResponseEntity<Void> deleteStore(
-            HttpServletRequest httpRequest,
+            @RequestAttribute("userId") Long userId,
             @PathVariable Long storeId
     ) {
-        Long userId = (Long)httpRequest.getAttribute("userId");
         storeService.deleteStore(userId, storeId);
 
         return ResponseEntity.ok().build();

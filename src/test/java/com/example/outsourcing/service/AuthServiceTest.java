@@ -38,8 +38,8 @@ public class AuthServiceTest {
     @Test
     void 유저_생성() {
         //given
-        User user = User.from(new SignupRequest("한성우", "abc123", "서울", "gkstjddn@gmail.com", UserRole.OWNER));
-        SignupRequest signupRequest = new SignupRequest("한성우", "abc123", "서울", "gktjsddn@gmail.com", UserRole.OWNER);
+        User user = User.from(new SignupRequest("한성우", "abc1@adsf23", "서울", "gkstjddn@gmail.com", "owner"), UserRole.OWNER);
+        SignupRequest signupRequest = new SignupRequest("한성우", "abc123", "서울", "gktjsddn@gmail.com", "owner");
 
         //when
         when(hi.getId()).thenReturn(1L);

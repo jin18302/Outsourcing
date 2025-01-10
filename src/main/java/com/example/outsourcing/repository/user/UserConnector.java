@@ -17,8 +17,17 @@ public class UserConnector {
         return userRepository.save(user);
     }
 
+    public User findById(Long userId) {
+        return userRepository.findByIdAndIsDeletedFalse(userId)
+                .orElseThrow(() -> new RuntimeException("유저없음"));
+    }
     public User findByEmail(String email) {
-        return userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("유저없음"));
+        return userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("유저없음"));
+    }
+
+    public boolean checkEmail(String email) {
+        return userRepository.existsByEmail(email);
     }
 }
 

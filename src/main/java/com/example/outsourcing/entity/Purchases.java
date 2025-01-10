@@ -29,21 +29,21 @@ public class Purchases {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "order_status")
-    private PurchasesStatus orderStatus;
+    private PurchasesStatus purchasesStatus;
 
     @Column(name = "total_price")
     private Long totalPrice;
 
 
-    public Purchases(Store store, Menu menu, Long price, User user, PurchasesStatus orderStatus){
+    public Purchases(Store store, Menu menu, Long price, User user, PurchasesStatus purchasesStatus){
         this.store = store;
         this.menu = menu;
         this.totalPrice = price;
         this.user = user;
-        this.orderStatus = orderStatus;
+        this.purchasesStatus = purchasesStatus;
     }
 
     public void updateOrderStatus(PurchasesStatus orderStatus){
-        this.orderStatus = orderStatus;
+        this.purchasesStatus = purchasesStatus;
     }
 }

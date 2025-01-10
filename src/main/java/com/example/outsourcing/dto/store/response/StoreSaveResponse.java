@@ -1,12 +1,7 @@
 package com.example.outsourcing.dto.store.response;
 
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+public record StoreSaveResponse(
+        Long id,
+        String name) {
 
-@Getter
-@RequiredArgsConstructor
-public class StoreSaveResponse {
-
-    private final Long id;
-    private final String name;
 }

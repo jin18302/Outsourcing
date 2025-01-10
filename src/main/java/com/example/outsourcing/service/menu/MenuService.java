@@ -1,62 +1,64 @@
 package com.example.outsourcing.service.menu;
 
+import com.example.outsourcing.common.exception.InvalidRequestException;
+import com.example.outsourcing.common.exception.UnauthorizedException;
 import com.example.outsourcing.dto.menu.request.AddMenuRequest;
 import com.example.outsourcing.dto.menu.request.UpdateMenuRequest;
 import com.example.outsourcing.dto.menu.response.MenuResponse;
 import com.example.outsourcing.entity.Menu;
 import com.example.outsourcing.entity.Store;
 import com.example.outsourcing.repository.menu.MenuConnector;
-import com.example.outsourcing.repository.menu.MenuRepository;
-import com.example.outsourcing.repository.store.StoreRepository;
-import jakarta.transaction.Transactional;
+import com.example.outsourcing.repository.store.StoreConnector;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
+
 
 @Service
-@Transactional
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class MenuService {
 
     private final MenuConnector menuConnector;
-    private final StoreRepository storeRepository;
+    private final StoreConnector storeConnector;
 
+    @Transactional
+    public MenuResponse saveMenu(Long userId, AddMenuRequest addMenuRequest) {
 
-    public void saveMenu(Long userId, AddMenuRequest addMenuRequest) {
-
-        Store store = storeRepository.findById(addMenuRequest.getStoreId())
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "해당가게는 존재하지 않습니다"));
+        Store store = storeConnector.findById(addMenuRequest.storeId());
 
         Long storeOwnerId = store.getUser().getId();
 
         checkPermission(userId, storeOwnerId);
 
-        Menu menu = new Menu(store, addMenuRequest.getName(), addMenuRequest.getPrice());
+        Menu menu = Menu.from(store, addMenuRequest.name(), addMenuRequest.price());
 
-        menuConnector.save(menu);
+        Menu saveMenu = menuConnector.save(menu);
+
+        return MenuResponse.from(saveMenu);
 
     }
 
+    @Transactional
+    public MenuResponse updateMenu(Long userId, UpdateMenuRequest request) {
 
-    public void updateMenu(Long userId, UpdateMenuRequest request) {
-
-        Menu menu = menuConnector.findById(request.getMenuId());
+        Menu menu = menuConnector.findById(request.menuId());
 
         Long storeOwnerId = menu.getStore().getUser().getId();
 
         checkPermission(userId, storeOwnerId);
 
-        if (request.getName() != null) {
-            menu.updateName(request.getName());
+        if (request.name() != null) {
+            menu.updateName(request.name());
         }
 
-        if (request.getPrice() != null) {
-            menu.updatePrice(request.getPrice());
+        if (request.price() != null) {
+            menu.updatePrice(request.price());
         }
+
+        return MenuResponse.from(menu);
 
     }
 
@@ -65,15 +67,16 @@ public class MenuService {
         List<Menu> menuList = menuConnector.findByStoreId(storeId);
 
         return menuList.stream().
-                map(menu -> new MenuResponse(menu.getName(), menu.getPrice())).toList();
+                map(MenuResponse::from).toList();
     }
 
 
+    @Transactional
     public void deleteMenu(Long menuId) {
         Menu menu = menuConnector.findById(menuId);
 
         if (menu.isDelete()) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "이미 삭제된 메뉴입니다");
+            throw new InvalidRequestException("이미 삭제된 메뉴입니다");
         }
 
         menu.delete();
@@ -82,7 +85,7 @@ public class MenuService {
 
     public void checkPermission(Long userId, Long storeOwnerId) {
         if (!userId.equals(storeOwnerId)) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "권한이 없습니다");
+            throw new UnauthorizedException("권한이 없습니다");
         }
     }
 

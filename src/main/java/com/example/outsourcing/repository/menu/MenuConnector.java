@@ -2,7 +2,9 @@ package com.example.outsourcing.repository.menu;
 
 import com.example.outsourcing.entity.Menu;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -16,7 +18,7 @@ public class MenuConnector {
     }
 
     public Menu findById(Long id) {
-        return menuRepository.findById(id).orElseThrow(() -> new RuntimeException("던져던져"));
+        return menuRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST,"해당 메뉴는 존재하지 않습니다"));
     }
 
     public List<Menu> findByStoreId(Long storeId) {

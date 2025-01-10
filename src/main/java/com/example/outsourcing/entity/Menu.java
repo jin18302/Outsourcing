@@ -1,13 +1,14 @@
 package com.example.outsourcing.entity;
 
-import com.example.outsourcing.dto.menu.request.UpdateMenuRequest;
+
+import com.example.outsourcing.dto.menu.request.AddMenuRequest;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
-@NoArgsConstructor
 @Entity @Table(name ="menus")
+@NoArgsConstructor
 public class Menu {
 
     @Id
@@ -18,7 +19,7 @@ public class Menu {
     @JoinColumn(name = "store_id")
     private Store store;
 
-    @Column(name ="name")
+    @Column(name = "name")
     private String name;
 
     @Column(name = "price")
@@ -28,22 +29,26 @@ public class Menu {
     private boolean isDelete = false;
 
 
-    public Menu(Store store, String name, Long price){
+    public void updateName(String name) {
+        this.name = name;
+    }
+
+    public void updatePrice(Long price) {
+        this.price = price;
+    }
+
+    public void delete() {
+        this.isDelete = true;
+    }
+
+
+    public Menu(Store store, String name, Long price) {
         this.store = store;
         this.name = name;
         this.price = price;
     }
 
-
-    public void updateName(String name){
-        this.name = name;
-    }
-
-    public void updatePrice(Long Price){
-        this.price = price;
-    }
-
-    public void delete(){
-        this.isDelete = true;
+    public static Menu from(Store store, String name, Long price) {
+        return new Menu(store, name, price);
     }
 }

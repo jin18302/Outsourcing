@@ -1,5 +1,8 @@
 package com.example.outsourcing.service.store;
 
+import com.example.outsourcing.common.exception.InvalidRequestException;
+import com.example.outsourcing.common.exception.NotFoundException;
+import com.example.outsourcing.common.exception.UnauthorizedException;
 import com.example.outsourcing.dto.store.request.StoreRequest;
 import com.example.outsourcing.dto.store.request.StoreUpdateRequest;
 import com.example.outsourcing.dto.store.response.StoreListResponse;
@@ -13,10 +16,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.Objects;
@@ -35,19 +36,12 @@ public class StoreService {
         int storeCount = storeRepository.countByUserId(userId);
 
         if(storeCount == 3) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "가게는 최대 3개까지만 운영할 수 있습니다.");
+            throw new InvalidRequestException("가게는 최대 3개까지만 운영할 수 있습니다.");
         }
 
         User user = userService.getUserById(userId);
 
-        Store newStore = new Store(
-                user,
-                request.getName(),
-                request.getAddress(),
-                request.getOpen(),
-                request.getClose(),
-                request.getMinAmount()
-        );
+        Store newStore = Store.from(user,request);
         Store savedStore = storeRepository.save(newStore);
 
         return new StoreSaveResponse(savedStore.getId(), savedStore.getName());
@@ -63,12 +57,7 @@ public class StoreService {
         Pageable pageable = PageRequest.of(page-1, size);
         Page<Store> storeList = storeRepository.findByIsDeletedFalse(pageable);
 
-        return storeList.map(store -> new StoreListResponse(
-                store.getId(),
-                store.getName(),
-                store.getOpen(),
-                store.getClose(),
-                store.getMinAmount()));
+        return storeList.map(StoreListResponse::from);
     }
 
 
@@ -88,21 +77,23 @@ public class StoreService {
     }
 
     @Transactional
-    public void updateStore(Long userId, Long storeId, StoreUpdateRequest request) {
+    public StoreResponse updateStore(Long userId, Long storeId, StoreUpdateRequest request) {
 
         Store store = getStoreById(storeId);
 
         if(!Objects.equals(store.getUser().getId(), userId)) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "본인의 가게만 수정할 수 있습니다.");
+            throw new UnauthorizedException("본인의 가게만 수정할 수 있습니다.");
         }
 
         store.updateDetails(
-                request.getName(),
-                request.getAddress(),
-                request.getOpen(),
-                request.getClose(),
-                request.getMinAmount()
+                request.name(),
+                request.address(),
+                request.open(),
+                request.close(),
+                request.minAmount()
         );
+
+        return StoreResponse.from(store);
     }
 
     @Transactional
@@ -111,7 +102,7 @@ public class StoreService {
         Store store = getStoreById(storeId);
 
         if(!Objects.equals(store.getUser().getId(), userId)) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "본인의 가게만 삭제할 수 있습니다.");
+            throw new UnauthorizedException("본인의 가게만 수정할 수 있습니다.");
         }
 
         store.delete();
@@ -119,6 +110,6 @@ public class StoreService {
 
     public Store getStoreById(Long storeId) {
         return storeRepository.findByIdAndIsDeletedFalse(storeId)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,"가게를 찾을 수 없습니다."));
+                .orElseThrow(() -> new NotFoundException("가게를 찾을 수 없습니다."));
     }
 }

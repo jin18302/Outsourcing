@@ -1,19 +1,19 @@
-package com.example.outsourcing.service.store;
+package com.example.outsourcing.repository.store;
 
 import com.example.outsourcing.entity.Store;
-import com.example.outsourcing.repository.store.StoreRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Component;
 import org.springframework.web.server.ResponseStatusException;
 
+@Component
 @RequiredArgsConstructor
-public class RepositoryConnectService {
+public class StoreConnector {
 
     private final StoreRepository storeRepository;
 
-
-    public Store getStoreById(Long storeId) {
+    public Store findById(Long storeId) {
         return storeRepository.findByIdAndIsDeletedFalse(storeId)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,"가게를 찾을 수 없습니다."));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,"가게없음"));
     }
 }

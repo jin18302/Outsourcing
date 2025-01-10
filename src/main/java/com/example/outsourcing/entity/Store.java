@@ -1,5 +1,6 @@
 package com.example.outsourcing.entity;
 
+import com.example.outsourcing.dto.store.request.StoreRequest;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -27,13 +28,23 @@ public class Store {
     private Integer minAmount;
     private boolean isDeleted = false;
 
-    public Store (User user, String name, String address, String open, String close, int minAmount) {
+    private Store (User user, String name, String address, String open, String close, int minAmount) {
         this.user = user;
         this.name = name;
         this.address = address;
         this.open = LocalTime.parse(open);
         this.close = LocalTime.parse(close);
         this.minAmount = minAmount;
+    }
+
+    public static Store from(User user, StoreRequest request) {
+        return new Store(
+                user,
+                request.name(),
+                request.address(),
+                request.open(),
+                request.close(),
+                request.minAmount());
     }
 
     public void updateDetails(

@@ -1,82 +1,80 @@
 package com.example.outsourcing.service.review;
 
 
+import com.example.outsourcing.common.exception.InvalidRequestException;
+import com.example.outsourcing.common.exception.UnauthorizedException;
 import com.example.outsourcing.common.status.PurchasesStatus;
-import com.example.outsourcing.dto.auth.response.SignupResponse;
 import com.example.outsourcing.dto.review.request.CreateReviewRequest;
 import com.example.outsourcing.dto.review.request.UpdateReviewRequest;
 import com.example.outsourcing.dto.review.response.ReviewResponse;
-import com.example.outsourcing.entity.*;
-import com.example.outsourcing.repository.purchases.PurchasesRepository;
-import com.example.outsourcing.repository.review.ReviewRepository;
+import com.example.outsourcing.entity.Purchases;
+import com.example.outsourcing.entity.Review;
+import com.example.outsourcing.entity.Store;
+import com.example.outsourcing.entity.User;
+import com.example.outsourcing.repository.purchases.PurchasesConnector;
+import com.example.outsourcing.repository.review.ReviewConnector;
+import com.example.outsourcing.repository.store.StoreConnector;
 import com.example.outsourcing.repository.user.UserConnector;
-import com.example.outsourcing.service.store.StoreService;
-import com.example.outsourcing.service.user.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.server.ResponseStatusException;
 
 @Service
 @RequiredArgsConstructor
 public class ReviewService {
-    private final UserConnector userConnector;
 
-    private final ReviewRepository reviewRepository;
-    private final PurchasesRepository purchasesRepository;
-    private final UserService userService;
-    private final StoreService storeService;
+    private final ReviewConnector reviewConnector;
+    private final PurchasesConnector purchasesConnector;
+    private final UserConnector userConnector;
+    private final StoreConnector storeConnector;
 
     @Transactional
     public ReviewResponse saveReview(Long userId, CreateReviewRequest createReviewRequest) {
 
-        User user = userService.getUserById(userId);
+        User user = userConnector.findById(userId);
 
-        Purchases purchases = purchasesRepository.findById(createReviewRequest.getPurchasesId()).
-                orElseThrow(() -> new ResponseStatusException((HttpStatus.NOT_FOUND), "주문정보를 찾을 수 없습니다."));
+        Purchases purchases = purchasesConnector.findById(createReviewRequest.purchasesId());
 
-        if (purchases.getUser().getId() != userId ) {
+        if (purchases.getUser().getId() != userId) {
             System.out.println(userId);
             System.out.println(purchases.getUser().getId());
             System.out.println(purchases.getUser().getName());
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "로그인된 아이디와 주문자의 아이디가 다릅니다. 해킹이 의심됩니다.");
+            throw new UnauthorizedException("로그인된 아이디와 주문자의 아이디가 다릅니다.");
         }
 
-        if (purchases.getOrderStatus().equals(PurchasesStatus.배달완료)) {
-            Store store = storeService.getStoreById(createReviewRequest.getStoreId());
-
-            Review review = new Review(
-                    store,
-                    purchases,
-                    user,
-                    createReviewRequest.getContents(),
-                    createReviewRequest.getRating());
-
-            return ReviewResponse.from(reviewRepository.save(review));
-        } else {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "주문상태가 배달완료가 아닙니다.");
+        if (!purchases.getPurchasesStatus().equals(PurchasesStatus.배달완료)) {
+            throw new InvalidRequestException("주문상태가 배달완료가 아닙니다.");
         }
+
+        Store store = storeConnector.findById(createReviewRequest.storeId());
+
+        Review review = new Review(
+                store,
+                purchases,
+                user,
+                createReviewRequest.contents(),
+                createReviewRequest.rating());
+
+        return ReviewResponse.from(reviewConnector.save(review));
 
 
     }
 
     public ReviewResponse updateReview(Long userId, UpdateReviewRequest updateReviewRequest) {
-        Review review = reviewRepository.findById(updateReviewRequest.getReviewId())
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "수정할 리뷰가 없습니다."));
+        Review review = reviewConnector.findById(updateReviewRequest.reviewId());
         if (review.getUser().getId() != userId) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "리뷰 작성자 본인만 수정할 수 있습니다.");
+            throw new UnauthorizedException("리뷰 작성자 본인만 수정할 수 있습니다.");
         }
 
-        if (updateReviewRequest.getContents() != null) {
-            review.updateContents(updateReviewRequest.getContents());
+        if (updateReviewRequest.contents() != null) {
+            review.updateContents(updateReviewRequest.contents());
         }
-        if (updateReviewRequest.getRating() != 0) {
-            review.updateRating(updateReviewRequest.getRating());
+        if (updateReviewRequest.rating() != 0) {
+            review.updateRating(updateReviewRequest.rating());
         }
         return ReviewResponse.from(review);
     }
@@ -93,7 +91,7 @@ public class ReviewService {
         String[] ratingData = rating.split("-");
 
 
-        return ReviewResponse.from(reviewRepository.findReviewByUserId(
+        return ReviewResponse.from(reviewConnector.findReviewByUserId(
                 userId,
                 Integer.parseInt(ratingData[0]),
                 Integer.parseInt(ratingData[1]),
@@ -112,7 +110,7 @@ public class ReviewService {
         String[] ratingData = rating.split("-");
 
 
-        return ReviewResponse.from(reviewRepository.findReviewByStoreId(
+        return ReviewResponse.from(reviewConnector.findReviewByStoreId(
                 storeId,
                 Integer.parseInt(ratingData[0]),
                 Integer.parseInt(ratingData[1]),
@@ -120,12 +118,11 @@ public class ReviewService {
     }
 
     public void removeReview(Long userId, Long reviewId) {
-        Review review = reviewRepository.findById(reviewId)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "삭제할 리뷰가 없습니다."));
+        Review review = reviewConnector.findById(reviewId);
         if (review.getUser().getId() != userId) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "리뷰 작성자 본인만 삭제할 수 있습니다.");
+            throw new UnauthorizedException("리뷰 작성자 본인만 삭제할 수 있습니다.");
         }
-        reviewRepository.delete(review);
+        reviewConnector.delete(review);
     }
 
 

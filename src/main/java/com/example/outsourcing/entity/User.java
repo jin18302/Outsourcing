@@ -47,10 +47,6 @@ public class User {
         }
     }
 
-    public void updateAddress(String address) {
-        this.address = address;
-    }
-
     public void delete() {
         this.isDeleted = true;
     }
@@ -58,18 +54,20 @@ public class User {
     public User() {
     }
 
-    private User(String email,String address , String name, String password) {
+    private User(String email,String address , String name, String password, UserRole userRole) {
         this.email = email;
         this.address = address;
         this.name =  name;
         this.password = password;
+        this.userRole = userRole;
     }
 
-    public static User from(SignupRequest request) {
+    public static User from(SignupRequest request, UserRole userRole) {
         return new User(
-                request.email(),
-                request.address(),
-                request.name(),
-                request.password());
+                request.getEmail(),
+                request.getAddress(),
+                request.getName(),
+                request.getPassword(),
+                userRole);
     }
 }

@@ -26,29 +26,26 @@ public class UserController {
 
     @PatchMapping("/users")
     public ResponseEntity<UserResponse> updateProfile(
-            HttpServletRequest httpRequest,
+            @RequestAttribute("userId") Long userId,
             @RequestBody UserChangeProfileRequest request
     ) {
-        Long userId = (Long)httpRequest.getAttribute("userId");
         return ResponseEntity.ok(userService.updateProfile(userId, request));
     }
 
     @PatchMapping("/users/password")
     public ResponseEntity<Void> updatePassword(
-            HttpServletRequest httpRequest,
+            @RequestAttribute("userId") Long userId,
             @RequestBody UserChangePasswordRequest request
     ) {
-        Long userId = (Long)httpRequest.getAttribute("userId");
         userService.updatePassword(userId, request);
         return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("/users")
     public ResponseEntity<Void> deleteUser(
-            HttpServletRequest httpRequest,
+            @RequestAttribute("userId") Long userId,
             @RequestBody UserDeleteRequest request
     ) {
-        Long userId = (Long)httpRequest.getAttribute("userId");
         userService.deleteUser(userId, request);
         return ResponseEntity.ok().build();
     }
