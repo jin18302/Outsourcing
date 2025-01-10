@@ -1,5 +1,6 @@
 package com.example.outsourcing.controller.menu;
 
+import com.example.outsourcing.common.annotation.RequireRole;
 import com.example.outsourcing.dto.menu.request.AddMenuRequest;
 import com.example.outsourcing.dto.menu.request.UpdateMenuRequest;
 import com.example.outsourcing.dto.menu.response.MenuResponse;
