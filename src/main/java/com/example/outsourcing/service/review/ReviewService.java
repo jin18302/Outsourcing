@@ -12,9 +12,8 @@ import com.example.outsourcing.entity.Review;
 import com.example.outsourcing.entity.Store;
 import com.example.outsourcing.entity.User;
 import com.example.outsourcing.repository.purchases.PurchasesConnector;
-import com.example.outsourcing.repository.review.ReviewConnector;
-import com.example.outsourcing.repository.store.StoreConnector;
-import com.example.outsourcing.repository.user.UserConnector;
+import com.example.outsourcing.service.store.StoreConnectorInterface;
+import com.example.outsourcing.service.user.UserConnectorInterface;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -27,15 +26,15 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class ReviewService {
 
-    private final ReviewConnector reviewConnector;
+    private final ReviewConnectorInterface reviewConnectorInterface;
     private final PurchasesConnector purchasesConnector;
-    private final UserConnector userConnector;
-    private final StoreConnector storeConnector;
+    private final UserConnectorInterface userConnectorInterface;
+    private final StoreConnectorInterface StoreConnectorInterface;
 
     @Transactional
     public ReviewResponse saveReview(Long userId, CreateReviewRequest createReviewRequest) {
 
-        User user = userConnector.findById(userId);
+        User user = userConnectorInterface.findById(userId);
 
         Purchases purchases = purchasesConnector.findById(createReviewRequest.purchasesId());
 
@@ -50,7 +49,7 @@ public class ReviewService {
             throw new InvalidRequestException("주문상태가 배달완료가 아닙니다.");
         }
 
-        Store store = storeConnector.findById(createReviewRequest.storeId());
+        Store store = StoreConnectorInterface.findById(createReviewRequest.storeId());
 
         Review review = new Review(
                 store,
@@ -59,13 +58,13 @@ public class ReviewService {
                 createReviewRequest.contents(),
                 createReviewRequest.rating());
 
-        return ReviewResponse.from(reviewConnector.save(review));
+        return ReviewResponse.from(reviewConnectorInterface.save(review));
 
 
     }
 
     public ReviewResponse updateReview(Long userId, UpdateReviewRequest updateReviewRequest) {
-        Review review = reviewConnector.findById(updateReviewRequest.reviewId());
+        Review review = reviewConnectorInterface.findById(updateReviewRequest.reviewId());
         if (review.getUser().getId() != userId) {
             throw new UnauthorizedException("리뷰 작성자 본인만 수정할 수 있습니다.");
         }
@@ -87,16 +86,13 @@ public class ReviewService {
                 10,
                 Sort.by(Sort.Order.desc("id")));
 
-
         String[] ratingData = rating.split("-");
 
-
-        return ReviewResponse.from(reviewConnector.findReviewByUserId(
+        return ReviewResponse.from(reviewConnectorInterface.findReviewByUserId(
                 userId,
                 Integer.parseInt(ratingData[0]),
                 Integer.parseInt(ratingData[1]),
                 page));
-
     }
 
     public Page<ReviewResponse> findReviewByStoreId(Long storeId, String rating, int pageNumber) {
@@ -110,7 +106,7 @@ public class ReviewService {
         String[] ratingData = rating.split("-");
 
 
-        return ReviewResponse.from(reviewConnector.findReviewByStoreId(
+        return ReviewResponse.from(reviewConnectorInterface.findReviewByStoreId(
                 storeId,
                 Integer.parseInt(ratingData[0]),
                 Integer.parseInt(ratingData[1]),
@@ -118,11 +114,11 @@ public class ReviewService {
     }
 
     public void removeReview(Long userId, Long reviewId) {
-        Review review = reviewConnector.findById(reviewId);
+        Review review = reviewConnectorInterface.findById(reviewId);
         if (review.getUser().getId() != userId) {
             throw new UnauthorizedException("리뷰 작성자 본인만 삭제할 수 있습니다.");
         }
-        reviewConnector.delete(review);
+        reviewConnectorInterface.delete(review);
     }
 
 
