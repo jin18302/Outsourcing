@@ -29,15 +29,21 @@ public class ReviewController {
     }
 
     @GetMapping
-    public ResponseEntity<Page<ReviewResponse>> findReviewByUserId(@RequestAttribute("userId") Long userId,@RequestParam String Rating, @RequestParam int pageNumber){
-        Page<ReviewResponse> result = reviewService.findReviewByUserId(userId, Rating, pageNumber);
+    public ResponseEntity<Page<ReviewResponse>> findReviewByUserId(
+            @RequestAttribute("userId") Long userId,
+            @RequestParam(value="rating",required=false,defaultValue="1-5") String rating,
+            @RequestParam(value="pageNumber",required=false,defaultValue="1") int pageNumber){
+        Page<ReviewResponse> result = reviewService.findReviewByUserId(userId, rating, pageNumber);
         return new ResponseEntity<> (result,HttpStatus.OK);
 
     }
 
     @GetMapping("{storeId}")
-    public ResponseEntity<Page<ReviewResponse>> findReviewByStoreId(@PathVariable Long storeId,@RequestParam String Rating, @RequestParam int pageNumber){
-        Page<ReviewResponse> result = reviewService.findReviewByStoreId(storeId, Rating, pageNumber);
+    public ResponseEntity<Page<ReviewResponse>> findReviewByStoreId(
+            @PathVariable Long storeId,
+            @RequestParam(value="rating",required=false,defaultValue="1-5") String rating,
+            @RequestParam(value="pageNumber",required=false,defaultValue="1") int pageNumber){
+        Page<ReviewResponse> result = reviewService.findReviewByStoreId(storeId, rating, pageNumber);
 
         return new ResponseEntity<>(result,HttpStatus.OK);
     }
