@@ -1,6 +1,7 @@
 package com.example.outsourcing.repository.review;
 
 import com.example.outsourcing.entity.Review;
+import com.example.outsourcing.service.review.ReviewConnectorInterface;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -11,7 +12,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 @Component
 @RequiredArgsConstructor
-public class ReviewConnector {
+public class ReviewConnector implements ReviewConnectorInterface {
     private final ReviewRepository reviewRepository;
 
     public Review save(Review review) {
