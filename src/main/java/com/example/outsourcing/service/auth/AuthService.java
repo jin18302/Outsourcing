@@ -5,8 +5,8 @@ import com.example.outsourcing.common.status.UserRole;
 import com.example.outsourcing.config.JwtUtil;
 import com.example.outsourcing.config.PasswordEncoder;
 import com.example.outsourcing.dto.auth.request.LoginRequest;
-import com.example.outsourcing.dto.auth.response.LoginResponse;
 import com.example.outsourcing.dto.auth.request.SignupRequest;
+import com.example.outsourcing.dto.auth.response.LoginResponse;
 import com.example.outsourcing.dto.auth.response.SignupResponse;
 import com.example.outsourcing.entity.User;
 import com.example.outsourcing.repository.user.UserConnector;
@@ -43,8 +43,8 @@ public class AuthService {
     }
 
     public SignupResponse signup(SignupRequest signupRequest) {
-        User byEmailUser = userConnector.findByEmail(signupRequest.getEmail());
-        if (byEmailUser != null) {
+        boolean byEmailUser = userConnector.checkEmail(signupRequest.getEmail());
+        if (byEmailUser) {
             throw new InvalidRequestException("중복된 이메일이 존재합니다.");
         }
         String encode = passwordEncoder.encode(signupRequest.getPassword());
