@@ -35,7 +35,8 @@ public class SignupResponse {
                 user.getEmail(),
                 user.getAddress(),
                 user.getName(),
-                UserRole.toString(user.getUserRole())
+                user.getUserRole().toString()
         );
     }
+
 }

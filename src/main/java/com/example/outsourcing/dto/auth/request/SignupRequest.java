@@ -31,6 +31,7 @@ public class SignupRequest{
                 this.email = email;
                 this.userRole = userRole;
         }
+
         @JsonCreator
         public static SignupRequest from(
                 @JsonProperty("name")

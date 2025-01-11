@@ -1,21 +1,25 @@
 package com.example.outsourcing.dto.purchases.request;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotBlank;
+import lombok.Getter;
 
+@Getter
 public class UpdatePurchasesRequest{
 
     @NotBlank
-    Long purchasesId;
+    private final Long purchasesId;
 
     @NotBlank
-    String purchasesStatus;
+    private final String purchasesStatus;
 
     private UpdatePurchasesRequest(Long purchasesId, String purchasesStatus) {
         this.purchasesId = purchasesId;
         this.purchasesStatus = purchasesStatus;
     }
 
+    @JsonCreator
     public static UpdatePurchasesRequest from(
             @JsonProperty("purchasesId")
             Long purchasesId,

@@ -20,6 +20,7 @@ public class LoginRequest {
         this.password = password;
     }
 
+    @JsonCreator
     public static LoginRequest from(
             @JsonProperty("email")
             String email,

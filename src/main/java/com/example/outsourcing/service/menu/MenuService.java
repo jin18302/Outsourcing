@@ -27,7 +27,7 @@ public class MenuService {
     @Transactional
     public MenuResponse saveMenu(Long userId, AddMenuRequest addMenuRequest) {
 
-        Store store = storeConnector.findById(addMenuRequest.getStoreId());
+        Store store = storeConnectorInterface.findById(addMenuRequest.getStoreId());
 
         Long storeOwnerId = store.getUser().getId();
 
@@ -35,7 +35,7 @@ public class MenuService {
 
         Menu menu = Menu.from(store, addMenuRequest.getName(), addMenuRequest.getPrice());
 
-        Menu saveMenu = menuConnector.save(menu);
+        Menu saveMenu = menuConnectorInterface.save(menu);
         return MenuResponse.from(saveMenu);
 
     }
@@ -43,7 +43,7 @@ public class MenuService {
     @Transactional
     public MenuResponse updateMenu(Long userId, UpdateMenuRequest request) {
 
-        Menu menu = menuConnectorInterface.findById(request.menuId());
+        Menu menu = menuConnectorInterface.findById(request.getMenuId());
 
         Long storeOwnerId = menu.getStore().getUser().getId();
 
@@ -61,9 +61,8 @@ public class MenuService {
 
     public List<MenuResponse> getMenus(Long storeId) {
         List<Menu> menuList = menuConnectorInterface.findByStoreId(storeId);
-
         return menuList.stream().
-                map(menu -> new MenuResponse(menu.getId(), menu.getName(), menu.getPrice())).toList();
+                map(MenuResponse::from).toList();
     }
 
 

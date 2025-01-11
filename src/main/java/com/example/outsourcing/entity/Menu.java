@@ -42,7 +42,7 @@ public class Menu {
     }
 
 
-    public Menu(Store store, String name, Long price) {
+    private Menu(Store store, String name, Long price) {
         this.store = store;
         this.name = name;
         this.price = price;

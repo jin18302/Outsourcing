@@ -9,6 +9,7 @@ import com.example.outsourcing.dto.auth.request.SignupRequest;
 import com.example.outsourcing.dto.auth.response.LoginResponse;
 import com.example.outsourcing.dto.auth.response.SignupResponse;
 import com.example.outsourcing.entity.User;
+import com.example.outsourcing.service.user.UserConnectorInterface;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,7 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class AuthService {
 
-    private final UserConnceterInterface userConnector;
+    private final UserConnectorInterface userConnector;
 
     private final PasswordEncoder passwordEncoder;
 
@@ -48,8 +49,7 @@ public class AuthService {
         }
         String encode = passwordEncoder.encode(signupRequest.getPassword());
 
-        UserRole userRole = UserRole.of(signupRequest.getUserRole());
-        User user = User.from(signupRequest, userRole);
+        User user = User.from(signupRequest);
         user.updatePassword(encode);
         User save = userConnector.save(user);
         return SignupResponse.from(save);

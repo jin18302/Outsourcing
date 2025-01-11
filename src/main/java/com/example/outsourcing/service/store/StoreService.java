@@ -41,14 +41,14 @@ public class StoreService {
 
         Store newStore = Store.from(
                 user,
-                request.name(),
-                request.address(),
-                request.open(),
-                request.close(),
-                request.minAmount());
+                request.getName(),
+                request.getAddress(),
+                request.getOpen(),
+                request.getClose(),
+                request.getMinAmount());
         Store savedStore = storeConnectorInterface.save(newStore);
 
-        return new StoreSaveResponse(savedStore.getId(), savedStore.getName());
+        return StoreSaveResponse.from(savedStore);
     }
 
     public StoreResponse findById(Long storeId) {
@@ -90,11 +90,11 @@ public class StoreService {
         }
 
         store.updateDetails(
-                request.name(),
-                request.address(),
-                request.open(),
-                request.close(),
-                request.minAmount()
+                request.getName(),
+                request.getAddress(),
+                request.getOpen(),
+                request.getClose(),
+                request.getMinAmount()
         );
 
         return StoreResponse.from(store);

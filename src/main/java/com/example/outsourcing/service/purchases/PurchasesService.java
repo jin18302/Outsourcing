@@ -33,7 +33,7 @@ public class PurchasesService {
     @PurchasesLog
     public PurchasesResponse createPurchases(AddPurchasesRequest request, Long userId) {
 
-        Store store = StoreConnectorInterface.findById(request.storeId());
+        Store store = StoreConnectorInterface.findById(request.getStoreId());
 
         LocalTime now = LocalTime.now();
 
@@ -45,7 +45,7 @@ public class PurchasesService {
             throw new InvalidRequestException("영업시간이 종료되었습니다");
         }
 
-        Menu menu = MenuConnectorInterface.findById(request.menuId());
+        Menu menu = MenuConnectorInterface.findById(request.getMenuId());
 
         Long totalPrice = menu.getPrice();//
 
@@ -59,12 +59,7 @@ public class PurchasesService {
 
         Purchases savePurchases = PurchasesConnectorInterface.save(purchases);
 
-        return PurchasesResponse.from(savePurchases.getId(),
-                                      savePurchases.getStore().getId(),
-                                      savePurchases.getMenu().getId(),
-                                      savePurchases.getUser().getId(),
-                                      savePurchases.getTotalPrice(),
-                                      savePurchases.getPurchasesStatus().name());
+        return PurchasesResponse.from(savePurchases);
 
     }
 
@@ -80,35 +75,24 @@ public class PurchasesService {
         }
         purchases.updateOrderStatus(PurchasesStatus.주문취소);
 
-        return PurchasesResponse.from(purchases.getId(),
-                purchases.getStore().getId(),
-                purchases.getMenu().getId(),
-                purchases.getUser().getId(),
-                purchases.getTotalPrice(),
-                purchases.getPurchasesStatus().name());
+        return PurchasesResponse.from(purchases);
     }
 
 
     @PurchasesLog
     public PurchasesResponse changePurchasesByOwner(Long userId, UpdatePurchasesRequest request) {
 
-        Purchases purchases = PurchasesConnectorInterface.findById(request.purchasesId());
+        Purchases purchases = PurchasesConnectorInterface.findById(request.getPurchasesId());
         Long ownerId = purchases.getStore().getUser().getId();
 
         if (!userId.equals(ownerId)) {
             throw new UnauthorizedException("권한이 존재하지 않습니다");
         }
 
-        PurchasesStatus status = PurchasesStatus.of(request.purchasesStatus());
+        PurchasesStatus status = PurchasesStatus.of(request.getPurchasesStatus());
 
         purchases.updateOrderStatus(status);
 
-
-        return PurchasesResponse.from(purchases.getId(),
-                purchases.getStore().getId(),
-                purchases.getMenu().getId(),
-                purchases.getUser().getId(),
-                purchases.getTotalPrice(),
-                purchases.getPurchasesStatus().name());
+        return PurchasesResponse.from(purchases);
     }
 }

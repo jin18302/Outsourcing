@@ -1,5 +1,6 @@
 package com.example.outsourcing.dto.menu.request;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -20,6 +21,7 @@ public class UpdateMenuRequest{
         this.price = price;
     }
 
+    @JsonCreator
     public static UpdateMenuRequest from(
             @JsonProperty("menuId")
             Long menuId,

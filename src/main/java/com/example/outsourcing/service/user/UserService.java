@@ -28,32 +28,32 @@ public class UserService {
     public UserResponse findById(Long userId) {
         User user = userConnectorInterface.findById(userId);
 
-        return new UserResponse(user.getId(), user.getEmail(), user.getName());
+        return UserResponse.from(user);
     }
 
     @Transactional
     public UserResponse updateProfile(Long userId, UserChangeProfileRequest request) {
         User user = userConnectorInterface.findById(userId);
 
-        user.updateProfile(request.name(), request.address());
+        user.updateProfile(request.getName(), request.getAddress());
 
         User savedUser = userConnectorInterface.save(user);
-        return new UserResponse(savedUser.getId(), savedUser.getEmail(), savedUser.getName());
+        return UserResponse.from(savedUser);
     }
 
     @Transactional
     public void updatePassword(Long userId, UserChangePasswordRequest request) {
         User user = userConnectorInterface.findById(userId);
 
-        if (passwordEncoder.matches(request.newPassword(), user.getPassword())) {
+        if (passwordEncoder.matches(request.getNewPassword(), user.getPassword())) {
             throw new InvalidRequestException("새 비밀번호는 기존 비밀번호와 같을 수 없습니다.");
         }
 
-        if (!passwordEncoder.matches(request.oldPassword(), user.getPassword())) {
+        if (!passwordEncoder.matches(request.getOldPassword(), user.getPassword())) {
             throw new InvalidRequestException("비밀번호가 일치하지 않습니다.");
         }
 
-        String encodedPassword = passwordEncoder.encode(request.newPassword());
+        String encodedPassword = passwordEncoder.encode(request.getNewPassword());
         user.updatePassword(encodedPassword);
     }
 

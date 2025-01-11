@@ -32,6 +32,7 @@ public class User {
     @Column(name = "is_deleted")
     private boolean isDeleted = false;
 
+
     public void updatePassword(String password) {
         this.password = password;
     }
@@ -62,12 +63,13 @@ public class User {
         this.userRole = userRole;
     }
 
-    public static User from(String email, String address, String name, String password, UserRole userRole) {
+    public static User from(SignupRequest signupRequest) {
         return new User(
-                email,
-                address,
-                name,
-                password,
-                userRole);
+                signupRequest.getEmail(),
+                signupRequest.getAddress(),
+                signupRequest.getName(),
+                signupRequest.getPassword(),
+                UserRole.of(signupRequest.getUserRole())
+                );
     }
 }

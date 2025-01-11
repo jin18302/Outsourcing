@@ -9,11 +9,10 @@ import lombok.Setter;
 
 @Getter
 public class MenuResponse {
-
+    @JsonProperty("id")
     private final Long id;
-
+    @JsonProperty("name")
     private final String name;
-
     @JsonProperty("price")
     private final Long price;
 
@@ -23,7 +22,7 @@ public class MenuResponse {
         this.price = price;
     }
 
-    @JsonCreator
+
     public static MenuResponse from(Menu menu){
         return new MenuResponse(
                 menu.getId(),

@@ -36,7 +36,7 @@ public class ReviewService {
 
         User user = userConnectorInterface.findById(userId);
 
-        Purchases purchases = purchasesConnector.findById(createReviewRequest.purchasesId());
+        Purchases purchases = purchasesConnector.findById(createReviewRequest.getPurchasesId());
 
         if (purchases.getUser().getId() != userId) {
             System.out.println(userId);
@@ -49,37 +49,37 @@ public class ReviewService {
             throw new InvalidRequestException("주문상태가 배달완료가 아닙니다.");
         }
 
-        Store store = StoreConnectorInterface.findById(createReviewRequest.storeId());
+        Store store = StoreConnectorInterface.findById(createReviewRequest.getStoreId());
 
         Review review = new Review(
                 store,
                 purchases,
                 user,
-                createReviewRequest.contents(),
-                createReviewRequest.rating());
+                createReviewRequest.getContents(),
+                createReviewRequest.getRating());
 
         return ReviewResponse.from(reviewConnectorInterface.save(review));
 
 
     }
 
+    @Transactional
     public ReviewResponse updateReview(Long userId, UpdateReviewRequest updateReviewRequest) {
-        Review review = reviewConnectorInterface.findById(updateReviewRequest.reviewId());
+        Review review = reviewConnectorInterface.findById(updateReviewRequest.getReviewId());
         if (review.getUser().getId() != userId) {
             throw new UnauthorizedException("리뷰 작성자 본인만 수정할 수 있습니다.");
         }
 
-        if (updateReviewRequest.contents() != null) {
-            review.updateContents(updateReviewRequest.contents());
+        if (updateReviewRequest.getContents() != null) {
+            review.updateContents(updateReviewRequest.getContents());
         }
-        if (updateReviewRequest.rating() != 0) {
-            review.updateRating(updateReviewRequest.rating());
+        if (updateReviewRequest.getRating() != 0) {
+            review.updateRating(updateReviewRequest.getRating());
         }
         return ReviewResponse.from(review);
     }
 
     public Page<ReviewResponse> findReviewByUserId(Long userId, String rating, int pageNumber) {
-
 
         Pageable page = PageRequest.of(
                 pageNumber - 1,
