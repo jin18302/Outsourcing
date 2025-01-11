@@ -43,7 +43,7 @@ public class Purchases {
         this.purchasesStatus = purchasesStatus;
     }
 
-    public void updateOrderStatus(PurchasesStatus orderStatus){
+    public void updateOrderStatus(PurchasesStatus purchasesStatus){
         this.purchasesStatus = purchasesStatus;
     }
 }

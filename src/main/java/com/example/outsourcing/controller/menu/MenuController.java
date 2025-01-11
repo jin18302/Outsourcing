@@ -8,7 +8,6 @@ import com.example.outsourcing.service.menu.MenuService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -24,7 +23,8 @@ public class MenuController {
 
     @RequireRole("OWNER")
     @PostMapping("/menus")
-    public ResponseEntity<MenuResponse> saveMenu(@RequestAttribute("userId") Long userId, AddMenuRequest addMenuRequest){
+    public ResponseEntity<MenuResponse> saveMenu(@RequestAttribute("userId") Long userId,
+                                                 @RequestBody AddMenuRequest addMenuRequest){
 
         MenuResponse menuResponse = menuService.saveMenu(userId, addMenuRequest);
 
@@ -33,8 +33,9 @@ public class MenuController {
 
     @RequireRole("OWNER")
     @PatchMapping("/menus")
-    public ResponseEntity<MenuResponse> updateMenu(@RequestAttribute("userId") Long userId,
-                                           UpdateMenuRequest updateMenuRequest){
+    public ResponseEntity<MenuResponse> updateMenu(
+            @RequestAttribute("userId") Long userId,
+            @RequestBody UpdateMenuRequest updateMenuRequest){
 
         MenuResponse menuResponse = menuService.updateMenu(userId, updateMenuRequest);
 

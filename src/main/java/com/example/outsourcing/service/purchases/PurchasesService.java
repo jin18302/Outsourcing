@@ -11,10 +11,9 @@ import com.example.outsourcing.entity.Menu;
 import com.example.outsourcing.entity.Purchases;
 import com.example.outsourcing.entity.Store;
 import com.example.outsourcing.entity.User;
-import com.example.outsourcing.repository.menu.MenuConnector;
-import com.example.outsourcing.repository.purchases.PurchasesConnector;
-import com.example.outsourcing.repository.store.StoreConnector;
-import com.example.outsourcing.repository.user.UserConnector;
+import com.example.outsourcing.service.menu.MenuConnectorInterface;
+import com.example.outsourcing.service.store.StoreConnectorInterface;
+import com.example.outsourcing.service.user.UserConnectorInterface;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -26,16 +25,15 @@ import java.time.LocalTime;
 @RequiredArgsConstructor
 public class PurchasesService {
 
-    private final PurchasesConnector purchasesConnector;
-    private final MenuConnector menuConnector;
-    private final StoreConnector storeConnector;
-    private final UserConnector userConnector;
-
+    private final PurchasesConnectorInterface PurchasesConnectorInterface;
+    private final MenuConnectorInterface MenuConnectorInterface;
+    private final StoreConnectorInterface StoreConnectorInterface;
+    private final UserConnectorInterface UserConnectorInterface;
 
     @PurchasesLog
-    public PurchasesResponse createPurchases(AddPurchasesRequest request) {
+    public PurchasesResponse createPurchases(AddPurchasesRequest request, Long userId) {
 
-        Store store = storeConnector.findById(request.storeId());
+        Store store = StoreConnectorInterface.findById(request.storeId());
 
         LocalTime now = LocalTime.now();
 
@@ -47,7 +45,7 @@ public class PurchasesService {
             throw new InvalidRequestException("영업시간이 종료되었습니다");
         }
 
-        Menu menu = menuConnector.findById(request.menuId());
+        Menu menu = MenuConnectorInterface.findById(request.menuId());
 
         Long totalPrice = menu.getPrice();//
 
@@ -55,37 +53,46 @@ public class PurchasesService {
             throw new InvalidRequestException("최소주문 금액을 만족하지 않아 주문 할 수 없습니다");
         }
 
-        User user = userConnector.findById(request.userId());
-
+        User user = UserConnectorInterface.findById(userId);
 
         Purchases purchases = new Purchases(store, menu, totalPrice, user, PurchasesStatus.주문요청);
 
-        Purchases savePurchases = purchasesConnector.save(purchases);
+        Purchases savePurchases = PurchasesConnectorInterface.save(purchases);
 
-        return PurchasesResponse.from(savePurchases);
+        return PurchasesResponse.from(savePurchases.getId(),
+                                      savePurchases.getStore().getId(),
+                                      savePurchases.getMenu().getId(),
+                                      savePurchases.getUser().getId(),
+                                      savePurchases.getTotalPrice(),
+                                      savePurchases.getPurchasesStatus().name());
 
     }
 
     @PurchasesLog
     public PurchasesResponse cancelPurchasesByUsers(Long userId, Long purchasesId) {
 
-        Purchases purchases = purchasesConnector.findById(purchasesId);
+        Purchases purchases = PurchasesConnectorInterface.findById(purchasesId);
 
         Long ownerId = purchases.getUser().getId();
 
         if (!ownerId.equals(userId)) {
             throw new UnauthorizedException("권한이 존재하지 않습니다");
         }
-
         purchases.updateOrderStatus(PurchasesStatus.주문취소);
 
-        return PurchasesResponse.from(purchases);
+        return PurchasesResponse.from(purchases.getId(),
+                purchases.getStore().getId(),
+                purchases.getMenu().getId(),
+                purchases.getUser().getId(),
+                purchases.getTotalPrice(),
+                purchases.getPurchasesStatus().name());
     }
+
 
     @PurchasesLog
     public PurchasesResponse changePurchasesByOwner(Long userId, UpdatePurchasesRequest request) {
 
-        Purchases purchases = purchasesConnector.findById(request.purchasesId());
+        Purchases purchases = PurchasesConnectorInterface.findById(request.purchasesId());
         Long ownerId = purchases.getStore().getUser().getId();
 
         if (!userId.equals(ownerId)) {
@@ -96,6 +103,12 @@ public class PurchasesService {
 
         purchases.updateOrderStatus(status);
 
-        return PurchasesResponse.from(purchases);
+
+        return PurchasesResponse.from(purchases.getId(),
+                purchases.getStore().getId(),
+                purchases.getMenu().getId(),
+                purchases.getUser().getId(),
+                purchases.getTotalPrice(),
+                purchases.getPurchasesStatus().name());
     }
 }

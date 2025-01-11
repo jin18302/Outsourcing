@@ -53,7 +53,6 @@ public class AuthService {
         user.updatePassword(encode);
         User save = userConnector.save(user);
         return SignupResponse.from(save);
-
     }
 
 }

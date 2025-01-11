@@ -12,12 +12,14 @@ import java.util.Optional;
 
 public interface StoreRepository extends JpaRepository<Store, Long> {
 
-    Optional<Store> findByIdAndIsDeletedFalse(Long id);
+    @Query("SELECT s FROM Store s WHERE s.id = :storeId AND s.isDeleted = false")
+    Optional<Store> findByIdAndIsDeletedFalse(@Param("storeId") Long storeId);
 
     // 사장님 가게 몇개인지
     @Query("SELECT Count(s) FROM Store s WHERE s.user.id = :userId and s.isDeleted = false")
     int countByUserId(@Param("userId") Long userId);
 
+    @Query("SELECT s FROM Store s WHERE s.isDeleted = false")
     Page<Store> findByIsDeletedFalse(Pageable pageable);
 
     // 검색시 이름에 들어가면 다 검색

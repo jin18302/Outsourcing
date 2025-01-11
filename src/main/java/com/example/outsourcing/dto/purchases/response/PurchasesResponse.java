@@ -29,13 +29,9 @@ public class PurchasesResponse {
         this.purchasesStatus = purchasesStatus;
     }
 
-    public static PurchasesResponse from(Purchases purchases) {
-        return new PurchasesResponse(
-                purchases.getId(),
-                purchases.getStore().getId(),
-                purchases.getMenu().getId(),
-                purchases.getUser().getId(),
-                purchases.getTotalPrice(),
-                purchases.getPurchasesStatus().name());
+    public static PurchasesResponse from(Long id, Long storeId, Long menuId,
+                                         Long userId, Long totalPrice, String purchasesStatus) {
+
+        return new PurchasesResponse(id, storeId, menuId, userId, totalPrice, purchasesStatus);
     }
 }

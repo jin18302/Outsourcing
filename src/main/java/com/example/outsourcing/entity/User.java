@@ -62,12 +62,12 @@ public class User {
         this.userRole = userRole;
     }
 
-    public static User from(SignupRequest request, UserRole userRole) {
+    public static User from(String email, String address, String name, String password, UserRole userRole) {
         return new User(
-                request.email(),
-                request.address(),
-                request.name(),
-                request.password(),
+                email,
+                address,
+                name,
+                password,
                 userRole);
     }
 }

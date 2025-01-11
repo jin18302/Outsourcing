@@ -14,4 +14,8 @@ public enum UserRole {
                 .findFirst()
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST,"유효하지 않은 UerRole"));
     }
+
+    public String toString() {
+        return this.name();
+    }
 }

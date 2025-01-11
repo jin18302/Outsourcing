@@ -44,9 +44,9 @@ public class UserController {
     @DeleteMapping("/users")
     public ResponseEntity<Void> deleteUser(
             @RequestAttribute("userId") Long userId,
-            @RequestBody UserDeleteRequest request
+            @RequestParam String password
     ) {
-        userService.deleteUser(userId, request);
+        userService.deleteUser(userId, password);
         return ResponseEntity.ok().build();
     }
 }

@@ -17,13 +17,17 @@ public class ReviewController {
     private final ReviewService reviewService;
 
     @PostMapping
-    public ResponseEntity<ReviewResponse> saveReview(@RequestAttribute("userId") Long userId,@RequestBody CreateReviewRequest createReviewRequest){
+    public ResponseEntity<ReviewResponse> saveReview(
+            @RequestAttribute("userId") Long userId,
+            @RequestBody CreateReviewRequest createReviewRequest){
         ReviewResponse result = reviewService.saveReview(userId, createReviewRequest);
         return new ResponseEntity<>(result, HttpStatus.CREATED);
     }
 
     @PatchMapping
-    public ResponseEntity<ReviewResponse> updateReview(@RequestAttribute("userId") Long userId,@RequestBody UpdateReviewRequest updateReviewRequest){
+    public ResponseEntity<ReviewResponse> updateReview(
+            @RequestAttribute("userId") Long userId,
+            @RequestBody UpdateReviewRequest updateReviewRequest){
         ReviewResponse result = reviewService.updateReview(userId, updateReviewRequest);
         return new ResponseEntity<>(result,HttpStatus.OK);
     }

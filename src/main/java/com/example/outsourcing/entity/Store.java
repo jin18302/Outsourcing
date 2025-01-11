@@ -37,14 +37,19 @@ public class Store {
         this.minAmount = minAmount;
     }
 
-    public static Store from(User user, StoreRequest request) {
+    public static Store from(User user,
+                             String name,
+                             String address,
+                             String open,
+                             String close,
+                             Integer minAmount) {
         return new Store(
                 user,
-                request.name(),
-                request.address(),
-                request.open(),
-                request.close(),
-                request.minAmount());
+                name,
+                address,
+                open,
+                close,
+                minAmount);
     }
 
     public void updateDetails(
