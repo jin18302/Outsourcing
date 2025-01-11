@@ -11,17 +11,18 @@ public record StoreUpdateRequest(
         Integer minAmount) {
 
     @JsonCreator
-    public StoreUpdateRequest(
+    public static StoreUpdateRequest from(
             @JsonProperty("name") String name,
             @JsonProperty("address") String address,
             @JsonProperty("open") String open,
             @JsonProperty("close") String close,
-            @JsonProperty("minAmount") Integer minAmount
-    ) {
-        this.name = name;
-        this.address = address;
-        this.open = open;
-        this.close = close;
-        this.minAmount = minAmount;
+            @JsonProperty("minAmount") Integer minAmount) {
+        return new StoreUpdateRequest(
+                name,
+                address,
+                open,
+                close,
+                minAmount
+        );
     }
 }

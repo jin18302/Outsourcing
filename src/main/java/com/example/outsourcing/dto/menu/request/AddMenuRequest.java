@@ -1,8 +1,38 @@
 package com.example.outsourcing.dto.menu.request;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import lombok.Getter;
 
-public record AddMenuRequest(@JsonProperty("storeId")Long storeId,
-                             @JsonProperty("name")String name,
-                             @JsonProperty("price")Long price) {
+@Getter
+public class AddMenuRequest{
+
+    @NotBlank
+    Long storeId;
+    @NotBlank
+    String name;
+    @NotBlank
+    Long price;
+
+    private AddMenuRequest(Long storeId, String name, Long price) {
+        this.storeId = storeId;
+        this.name = name;
+        this.price = price;
+    }
+
+    public static AddMenuRequest from(
+            @JsonProperty("storeId")
+            Long storeId,
+            @JsonProperty("name")
+            String name,
+            @JsonProperty("price")
+            Long price
+    ) {
+        return new AddMenuRequest(
+                storeId,
+                name,
+                price
+        );
+    }
 }

@@ -2,6 +2,7 @@ package com.example.outsourcing.service.menu;
 
 import com.example.outsourcing.common.exception.InvalidRequestException;
 import com.example.outsourcing.common.exception.UnauthorizedException;
+import com.example.outsourcing.dto.auth.response.LoginResponse;
 import com.example.outsourcing.dto.menu.request.AddMenuRequest;
 import com.example.outsourcing.dto.menu.request.UpdateMenuRequest;
 import com.example.outsourcing.dto.menu.response.MenuResponse;
@@ -27,16 +28,15 @@ public class MenuService {
     @Transactional
     public MenuResponse saveMenu(Long userId, AddMenuRequest addMenuRequest) {
 
-        Store store = storeConnector.findById(addMenuRequest.storeId());
+        Store store = storeConnector.findById(addMenuRequest.getStoreId());
 
         Long storeOwnerId = store.getUser().getId();
 
         checkPermission(userId, storeOwnerId);
 
-        Menu menu = Menu.from(store, addMenuRequest.name(), addMenuRequest.price());
+        Menu menu = Menu.from(store, addMenuRequest.getName(), addMenuRequest.getPrice());
 
         Menu saveMenu = menuConnector.save(menu);
-
         return MenuResponse.from(saveMenu);
 
     }
@@ -44,24 +44,21 @@ public class MenuService {
     @Transactional
     public MenuResponse updateMenu(Long userId, UpdateMenuRequest request) {
 
-        Menu menu = menuConnector.findById(request.menuId());
+        Menu menu = menuConnector.findById(request.getMenuId());
 
         Long storeOwnerId = menu.getStore().getUser().getId();
 
         checkPermission(userId, storeOwnerId);
 
-        if (request.name() != null) {
-            menu.updateName(request.name());
+        if (request.getName() != null) {
+            menu.updateName(request.getName());
         }
 
-        if (request.price() != null) {
-            menu.updatePrice(request.price());
+        if (request.getPrice() != null) {
+            menu.updatePrice(request.getPrice());
         }
-
         return MenuResponse.from(menu);
-
     }
-
 
     public List<MenuResponse> getMenus(Long storeId) {
         List<Menu> menuList = menuConnector.findByStoreId(storeId);
@@ -78,10 +75,8 @@ public class MenuService {
         if (menu.isDelete()) {
             throw new InvalidRequestException("이미 삭제된 메뉴입니다");
         }
-
         menu.delete();
     }
-
 
     public void checkPermission(Long userId, Long storeOwnerId) {
         if (!userId.equals(storeOwnerId)) {

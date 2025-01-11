@@ -25,34 +25,35 @@ public class AuthService {
     private final JwtUtil jwtUtil;
 
     public LoginResponse login(LoginRequest loginRequest) {
-        User user = userConnector.findByEmail(loginRequest.email());
+        User user = userConnector.findByEmail(loginRequest.getEmail());
 
         if (user.isDeleted()) {
             throw new InvalidRequestException("삭제된 아이디입니다.");
         }
 
         // 못찾으면 찾을수없는 이메일 익셉션
-        if (!passwordEncoder.matches(loginRequest.password(), user.getPassword())) {
+        if (!passwordEncoder.matches(loginRequest.getPassword(), user.getPassword())) {
             throw new InvalidRequestException("비밀번호가 일치하지 않습니다.");
         }
 
         String token = jwtUtil.createToken(user.getId(), user.getEmail(), user.getUserRole());
 
-        return new LoginResponse(token);
+        return LoginResponse.from(token);
     }
 
     public SignupResponse signup(SignupRequest signupRequest) {
-        boolean byEmailUser = userConnector.checkEmail(signupRequest.email());
+        boolean byEmailUser = userConnector.checkEmail(signupRequest.getEmail());
         if (byEmailUser) {
             throw new InvalidRequestException("중복된 이메일이 존재합니다.");
         }
-        String encode = passwordEncoder.encode(signupRequest.password());
+        String encode = passwordEncoder.encode(signupRequest.getPassword());
 
-        UserRole userRole = UserRole.of(signupRequest.userRole());
+        UserRole userRole = UserRole.of(signupRequest.getUserRole());
         User user = User.from(signupRequest, userRole);
         user.updatePassword(encode);
         User save = userConnector.save(user);
         return SignupResponse.from(save);
+
     }
 
 }

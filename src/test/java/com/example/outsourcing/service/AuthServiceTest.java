@@ -38,13 +38,13 @@ public class AuthServiceTest {
     @Test
     void 유저_생성() {
         //given
-        User user = User.from(new SignupRequest("한성우", "abc1@adsf23", "서울", "gkstjddn@gmail.com", "owner"), UserRole.OWNER);
-        SignupRequest signupRequest = new SignupRequest("한성우", "abc123", "서울", "gktjsddn@gmail.com", "owner");
+        User user = User.from(SignupRequest.from("한성우", "abc1@adsf23", "서울", "gkstjddn@gmail.com", "owner"), UserRole.OWNER);
+        SignupRequest signupRequest = SignupRequest.from("한성우", "abc123", "서울", "gktjsddn@gmail.com", "owner");
 
         //when
         when(hi.getId()).thenReturn(1L);
         when(hi.getAddress()).thenReturn("서울");
-        when(userConnector.findByEmail(signupRequest.email())).thenReturn(null);
+        when(userConnector.findByEmail(signupRequest.getEmail())).thenReturn(null);
         when(passwordEncoder.encode(user.getPassword())).thenReturn("sasdf");
         when(userConnector.save(any(User.class))).thenReturn(hi);
 

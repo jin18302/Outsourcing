@@ -6,7 +6,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @Getter
-@AllArgsConstructor
 public class PurchasesResponse {
 
     private final Long purchasesId;
@@ -21,6 +20,14 @@ public class PurchasesResponse {
 
     private final String purchasesStatus;
 
+    private PurchasesResponse(Long purchasesId, Long storeId, Long menuId, Long userId, Long totalPrice, String purchasesStatus) {
+        this.purchasesId = purchasesId;
+        this.storeId = storeId;
+        this.menuId = menuId;
+        this.userId = userId;
+        this.totalPrice = totalPrice;
+        this.purchasesStatus = purchasesStatus;
+    }
 
     public static PurchasesResponse from(Purchases purchases) {
         return new PurchasesResponse(
