@@ -18,7 +18,7 @@ public class SearchController {
     private final SearchService searchService;
 
     @GetMapping
-    public ResponseEntity<Page<SearchResponse>> searchStoreAndMenu(@RequestParam String keyword, @RequestParam(value="pageNumber",required=false,defaultValue="1") int pageNumber){
+    public ResponseEntity<Page<SearchResponse>> searchStoreAndMenu(@RequestParam(value="keyword",required=true) String keyword, @RequestParam(value="pageNumber",required=false,defaultValue="1") int pageNumber){
         Page<SearchResponse> result = searchService.searchStoreAndMenu(keyword, pageNumber);
         return new ResponseEntity<>(result,HttpStatus.OK);
     }
