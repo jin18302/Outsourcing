@@ -5,6 +5,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import org.springframework.data.domain.Page;
 
+import java.time.LocalDateTime;
+
 @Getter
 public class ReviewResponse {
     @JsonProperty("userName")
@@ -17,13 +19,19 @@ public class ReviewResponse {
     private final String contents;
     @JsonProperty("rating")
     private final int rating;
+    @JsonProperty("createdAt")
+    private final LocalDateTime createdAt;
+    @JsonProperty("modifiedAt")
+    private final LocalDateTime modifiedAt;
 
-    private ReviewResponse(String username, String storeName, String menuName, String contents, int rating) {
+    private ReviewResponse(String username, String storeName, String menuName, String contents, int rating, LocalDateTime createdAt, LocalDateTime modifiedAt) {
         this.userName = username;
         this.storeName = storeName;
         this.menuName = menuName;
         this.contents = contents;
         this.rating = rating;
+        this.createdAt = createdAt;
+        this.modifiedAt = modifiedAt;
     }
 
     public static ReviewResponse from(Review review){
@@ -32,7 +40,9 @@ public class ReviewResponse {
                 review.getStore().getName(),
                 review.getPurchases().getMenu().getName(),
                 review.getContents(),
-                review.getRating()
+                review.getRating(),
+                review.getCreatedAt(),
+                review.getModifiedAt()
                 );
     }
 

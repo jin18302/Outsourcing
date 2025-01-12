@@ -7,6 +7,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
+
 @Getter
 public class MenuResponse {
     @JsonProperty("id")
@@ -15,11 +17,17 @@ public class MenuResponse {
     private final String name;
     @JsonProperty("price")
     private final Long price;
+    @JsonProperty("createdAt")
+    private final LocalDateTime createdAt;
+    @JsonProperty("modifiedAt")
+    private final LocalDateTime modifiedAt;
 
-    private MenuResponse(Long id, String name, Long price) {
+    private MenuResponse(Long id, String name, Long price, LocalDateTime createdAt, LocalDateTime modifiedAt) {
         this.id = id;
         this.name = name;
         this.price = price;
+        this.createdAt = createdAt;
+        this.modifiedAt = modifiedAt;
     }
 
 
@@ -27,6 +35,8 @@ public class MenuResponse {
         return new MenuResponse(
                 menu.getId(),
                 menu.getName(),
-                menu.getPrice());
+                menu.getPrice(),
+                menu.getCreatedAt(),
+                menu.getModifiedAt());
     }
 }
