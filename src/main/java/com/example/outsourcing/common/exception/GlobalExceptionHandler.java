@@ -1,5 +1,6 @@
 package com.example.outsourcing.common.exception;
 
+import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -29,6 +30,13 @@ public class GlobalExceptionHandler {
                 .map(error -> error.getDefaultMessage())
                 .orElse("");
         return getErrorResponse(status, message);
+    }
+
+    @ExceptionHandler(ConstraintViolationException.class)
+    public ResponseEntity<Map<String,Object>> handleConstraintViolationException(ConstraintViolationException ex){
+        HttpStatus status = HttpStatus.BAD_REQUEST;
+        return getErrorResponse(status,ex.getMessage());
+
     }
 
     @ExceptionHandler(NotFoundException.class)

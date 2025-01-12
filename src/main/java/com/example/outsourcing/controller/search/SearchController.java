@@ -10,19 +10,21 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
+@Validated
 @RequestMapping("/api/search")
 public class SearchController {
     private final SearchService searchService;
 
     @GetMapping
     public ResponseEntity<Page<SearchResponse>> searchStoreAndMenu(
-            @Valid @RequestParam(value="keyword" )
+            @RequestParam(value="keyword",required=true)
             @NotBlank(message="검색어는 빈값일 수 없습니다.") String keyword,
             @RequestParam(value="pageNumber",required=false,defaultValue="1") int pageNumber){
         Page<SearchResponse> result = searchService.searchStoreAndMenu(keyword, pageNumber);
