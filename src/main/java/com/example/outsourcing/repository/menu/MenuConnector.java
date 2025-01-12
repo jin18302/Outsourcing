@@ -1,10 +1,14 @@
 package com.example.outsourcing.repository.menu;
 
-import com.example.outsourcing.common.exception.InvalidRequestException;
+import com.example.outsourcing.dto.search.response.SearchResponse;
 import com.example.outsourcing.entity.Menu;
 import com.example.outsourcing.service.menu.MenuConnectorInterface;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -20,12 +24,16 @@ public class MenuConnector implements MenuConnectorInterface {
 
     @Override
     public Menu findById(Long id) {
-        return menuRepository.findById(id)
-                .orElseThrow(() -> new InvalidRequestException("해당 메뉴는 존재하지 않습니다"));
+        return menuRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST,"해당 메뉴는 존재하지 않습니다"));
     }
 
     @Override
     public List<Menu> findByStoreId(Long storeId) {
         return menuRepository.findByStoreId(storeId);
+    }
+
+    @Override
+    public Page<SearchResponse> findStoreAndMenu(String Keyword, Pageable pageable){
+        return menuRepository.findStoreAndMenu(Keyword,pageable);
     }
 }
