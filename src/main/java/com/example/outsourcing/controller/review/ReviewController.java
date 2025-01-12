@@ -4,6 +4,7 @@ import com.example.outsourcing.dto.review.request.CreateReviewRequest;
 import com.example.outsourcing.dto.review.request.UpdateReviewRequest;
 import com.example.outsourcing.dto.review.response.ReviewResponse;
 import com.example.outsourcing.service.review.ReviewService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -19,7 +20,7 @@ public class ReviewController {
     @PostMapping
     public ResponseEntity<ReviewResponse> saveReview(
             @RequestAttribute("userId") Long userId,
-            @RequestBody CreateReviewRequest createReviewRequest){
+            @Valid @RequestBody CreateReviewRequest createReviewRequest){
         ReviewResponse result = reviewService.saveReview(userId, createReviewRequest);
         return new ResponseEntity<>(result, HttpStatus.CREATED);
     }
@@ -27,7 +28,7 @@ public class ReviewController {
     @PatchMapping
     public ResponseEntity<ReviewResponse> updateReview(
             @RequestAttribute("userId") Long userId,
-            @RequestBody UpdateReviewRequest updateReviewRequest){
+            @Valid @RequestBody UpdateReviewRequest updateReviewRequest){
         ReviewResponse result = reviewService.updateReview(userId, updateReviewRequest);
         return new ResponseEntity<>(result,HttpStatus.OK);
     }

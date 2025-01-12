@@ -1,6 +1,6 @@
 package com.example.outsourcing.entity;
 
-import com.example.outsourcing.dto.store.request.StoreRequest;
+import com.example.outsourcing.common.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,7 +11,7 @@ import java.time.LocalTime;
 @Entity
 @NoArgsConstructor
 @Table(name = "stores")
-public class Store {
+public class Store extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

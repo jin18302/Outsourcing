@@ -1,7 +1,7 @@
 package com.example.outsourcing.entity;
 
 
-import com.example.outsourcing.dto.menu.request.AddMenuRequest;
+import com.example.outsourcing.common.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @Entity @Table(name ="menus")
 @NoArgsConstructor
-public class Menu {
+public class Menu extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

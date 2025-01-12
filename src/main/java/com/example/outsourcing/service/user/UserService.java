@@ -4,11 +4,9 @@ import com.example.outsourcing.common.exception.InvalidRequestException;
 import com.example.outsourcing.config.PasswordEncoder;
 import com.example.outsourcing.dto.user.request.UserChangePasswordRequest;
 import com.example.outsourcing.dto.user.request.UserChangeProfileRequest;
-import com.example.outsourcing.dto.user.request.UserDeleteRequest;
 import com.example.outsourcing.dto.user.response.UserResponse;
 import com.example.outsourcing.entity.Store;
 import com.example.outsourcing.entity.User;
-import com.example.outsourcing.repository.store.StoreRepository;
 import com.example.outsourcing.service.store.StoreConnectorInterface;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -42,7 +40,7 @@ public class UserService {
     }
 
     @Transactional
-    public void updatePassword(Long userId, UserChangePasswordRequest request) {
+    public UserResponse updatePassword(Long userId, UserChangePasswordRequest request) {
         User user = userConnectorInterface.findById(userId);
 
         if (passwordEncoder.matches(request.getNewPassword(), user.getPassword())) {
@@ -55,6 +53,8 @@ public class UserService {
 
         String encodedPassword = passwordEncoder.encode(request.getNewPassword());
         user.updatePassword(encodedPassword);
+
+        return UserResponse.from(user);
     }
 
     @Transactional

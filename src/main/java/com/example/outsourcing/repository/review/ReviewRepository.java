@@ -25,5 +25,6 @@ public interface ReviewRepository extends JpaRepository<Review, Long>{
                                      @Param("endRating")  int endRating,
                                      Pageable pageable);
 
+    boolean existsByPurchasesId(@Param("purchasesId") Long purchasesId);
 
 }

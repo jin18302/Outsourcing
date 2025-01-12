@@ -3,12 +3,13 @@ package com.example.outsourcing.dto.purchases.request;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 
 @Getter
 public class UpdatePurchasesRequest{
 
-    @NotBlank
+    @NotNull
     private final Long purchasesId;
 
     @NotBlank

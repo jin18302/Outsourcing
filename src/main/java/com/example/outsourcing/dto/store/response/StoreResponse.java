@@ -3,9 +3,8 @@ package com.example.outsourcing.dto.store.response;
 import com.example.outsourcing.entity.Store;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
 
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 @Getter
@@ -22,14 +21,20 @@ public class StoreResponse {
     private final LocalTime close;
     @JsonProperty("minAmount")
     private final Integer minAmount;
+    @JsonProperty("createdAt")
+    private final LocalDateTime createdAt;
+    @JsonProperty("modifiedAt")
+    private final LocalDateTime modifiedAt;
 
-    private StoreResponse(Long id, String name, String address, LocalTime open, LocalTime close, Integer minAmount) {
+    private StoreResponse(Long id, String name, String address, LocalTime open, LocalTime close, Integer minAmount, LocalDateTime createdAt, LocalDateTime modifiedAt) {
         this.id = id;
         this.name = name;
         this.address = address;
         this.open = open;
         this.close = close;
         this.minAmount = minAmount;
+        this.createdAt = createdAt;
+        this.modifiedAt = modifiedAt;
     }
 
     public static StoreResponse from(Store store) {
@@ -39,7 +44,9 @@ public class StoreResponse {
                 store.getAddress(),
                 store.getOpen(),
                 store.getClose(),
-                store.getMinAmount()
+                store.getMinAmount(),
+                store.getCreatedAt(),
+                store.getModifiedAt()
         );
     }
 }

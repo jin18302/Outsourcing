@@ -15,15 +15,18 @@ import org.springframework.web.server.ResponseStatusException;
 public class ReviewConnector implements ReviewConnectorInterface {
     private final ReviewRepository reviewRepository;
 
+    @Override
     public Review save(Review review) {
         return reviewRepository.save(review);
     }
 
+    @Override
     public Review findById(Long reviewId) {
         return reviewRepository.findById(reviewId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "리뷰가 없습니다."));
     }
 
+    @Override
     public Page<Review> findReviewByUserId(Long userId, int startRating, int endRating, Pageable page) {
         return reviewRepository.findReviewByUserId(
                 userId,
@@ -32,6 +35,7 @@ public class ReviewConnector implements ReviewConnectorInterface {
                 page);
     }
 
+    @Override
     public Page<Review> findReviewByStoreId(Long storeId, int startRating, int endRating, Pageable page) {
     return reviewRepository.findReviewByStoreId(
             storeId,
@@ -41,6 +45,12 @@ public class ReviewConnector implements ReviewConnectorInterface {
     );
     }
 
+    @Override
+    public boolean existsByPurchasesId(Long purchasesId) {
+        return reviewRepository.existsByPurchasesId(purchasesId);
+    }
+
+    @Override
     public void delete(Review review) {
         reviewRepository.delete(review);
     }

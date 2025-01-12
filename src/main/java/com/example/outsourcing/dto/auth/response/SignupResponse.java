@@ -1,11 +1,10 @@
 package com.example.outsourcing.dto.auth.response;
 
-import com.example.outsourcing.common.status.UserRole;
 import com.example.outsourcing.entity.User;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
+
+import java.time.LocalDateTime;
 
 
 @Getter
@@ -20,13 +19,19 @@ public class SignupResponse {
     private final String name;
     @JsonProperty("userRole")
     private final String  userRole;
+    @JsonProperty("createdAt")
+    private final LocalDateTime createdAt;
+    @JsonProperty("modifiedAt")
+    private final LocalDateTime modifiedAt;
 
-    private SignupResponse(long id, String email, String address, String name, String userRole) {
+    private SignupResponse(long id, String email, String address, String name, String userRole, LocalDateTime createdAt, LocalDateTime modifiedAt) {
         this.id = id;
         this.email = email;
         this.address = address;
         this.name = name;
         this.userRole = userRole;
+        this.createdAt = createdAt;
+        this.modifiedAt = modifiedAt;
     }
 
     public static SignupResponse from(User user) {
@@ -35,7 +40,9 @@ public class SignupResponse {
                 user.getEmail(),
                 user.getAddress(),
                 user.getName(),
-                user.getUserRole().toString()
+                user.getUserRole().toString(),
+                user.getCreatedAt(),
+                user.getModifiedAt()
         );
     }
 

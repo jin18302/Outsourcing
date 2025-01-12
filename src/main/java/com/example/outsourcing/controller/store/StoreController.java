@@ -5,8 +5,8 @@ import com.example.outsourcing.dto.store.request.StoreRequest;
 import com.example.outsourcing.dto.store.request.StoreUpdateRequest;
 import com.example.outsourcing.dto.store.response.StoreListResponse;
 import com.example.outsourcing.dto.store.response.StoreResponse;
-import com.example.outsourcing.dto.store.response.StoreSaveResponse;
 import com.example.outsourcing.service.store.StoreService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -24,9 +24,9 @@ public class StoreController {
 
     @RequireRole(value = "OWNER")
     @PostMapping
-    public ResponseEntity<StoreSaveResponse> create(
+    public ResponseEntity<StoreResponse> create(
             @RequestAttribute("userId") Long userId,
-            @RequestBody StoreRequest request
+            @Valid @RequestBody StoreRequest request
     ) {
         return ResponseEntity.status(HttpStatus.CREATED).body(storeService.create(userId, request));
     }
@@ -67,7 +67,7 @@ public class StoreController {
     public ResponseEntity<StoreResponse> updateStore(
             @RequestAttribute("userId") Long userId,
             @PathVariable Long storeId,
-            @RequestBody StoreUpdateRequest request
+            @Valid @RequestBody StoreUpdateRequest request
     ) {
 
         return ResponseEntity.ok(storeService.updateStore(userId, storeId, request));

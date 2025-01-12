@@ -11,7 +11,7 @@ import com.example.outsourcing.entity.Purchases;
 import com.example.outsourcing.entity.Review;
 import com.example.outsourcing.entity.Store;
 import com.example.outsourcing.entity.User;
-import com.example.outsourcing.repository.purchases.PurchasesConnector;
+import com.example.outsourcing.service.purchases.PurchasesConnectorInterface;
 import com.example.outsourcing.service.store.StoreConnectorInterface;
 import com.example.outsourcing.service.user.UserConnectorInterface;
 import lombok.RequiredArgsConstructor;
@@ -27,16 +27,20 @@ import org.springframework.transaction.annotation.Transactional;
 public class ReviewService {
 
     private final ReviewConnectorInterface reviewConnectorInterface;
-    private final PurchasesConnector purchasesConnector;
+    private final PurchasesConnectorInterface purchasesConnectorInterface;
     private final UserConnectorInterface userConnectorInterface;
     private final StoreConnectorInterface StoreConnectorInterface;
 
     @Transactional
     public ReviewResponse saveReview(Long userId, CreateReviewRequest createReviewRequest) {
 
+        if (reviewConnectorInterface.existsByPurchasesId(createReviewRequest.getPurchasesId())) {
+            throw new InvalidRequestException("이미 리뷰가 달린 주문입니다");
+        }
+
         User user = userConnectorInterface.findById(userId);
 
-        Purchases purchases = purchasesConnector.findById(createReviewRequest.getPurchasesId());
+        Purchases purchases = purchasesConnectorInterface.findById(createReviewRequest.getPurchasesId());
 
         if (purchases.getUser().getId() != userId) {
             System.out.println(userId);
@@ -81,12 +85,18 @@ public class ReviewService {
 
     public Page<ReviewResponse> findReviewByUserId(Long userId, String rating, int pageNumber) {
 
+        if (rating.isEmpty()) {
+            rating = "1-5";
+        }
+
         Pageable page = PageRequest.of(
                 pageNumber - 1,
                 10,
                 Sort.by(Sort.Order.desc("id")));
 
         String[] ratingData = rating.split("-");
+
+
 
         return ReviewResponse.from(reviewConnectorInterface.findReviewByUserId(
                 userId,
@@ -96,6 +106,10 @@ public class ReviewService {
     }
 
     public Page<ReviewResponse> findReviewByStoreId(Long storeId, String rating, int pageNumber) {
+
+        if (rating.isEmpty()) {
+            rating = "1-5";
+        }
 
         Pageable page = PageRequest.of(
                 pageNumber - 1,

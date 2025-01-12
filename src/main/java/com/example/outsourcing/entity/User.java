@@ -1,5 +1,6 @@
 package com.example.outsourcing.entity;
 
+import com.example.outsourcing.common.entity.BaseEntity;
 import com.example.outsourcing.common.status.UserRole;
 import com.example.outsourcing.dto.auth.request.SignupRequest;
 import jakarta.persistence.*;
@@ -8,7 +9,7 @@ import lombok.Getter;
 @Getter
 @Entity
 @Table(name = "users")
-public class User {
+public class User extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -50,6 +51,7 @@ public class User {
 
     public void delete() {
         this.isDeleted = true;
+        this.name = "탈퇴한 유저";
     }
 
     public User() {

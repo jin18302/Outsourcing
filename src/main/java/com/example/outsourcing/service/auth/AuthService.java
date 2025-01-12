@@ -39,7 +39,7 @@ public class AuthService {
 
         String token = jwtUtil.createToken(user.getId(), user.getEmail(), user.getUserRole());
 
-        return LoginResponse.from(token);
+        return LoginResponse.from(jwtUtil.substringToken(token));
     }
 
     public SignupResponse signup(SignupRequest signupRequest) {

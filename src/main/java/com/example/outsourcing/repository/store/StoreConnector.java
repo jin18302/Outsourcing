@@ -30,7 +30,7 @@ public class StoreConnector implements StoreConnectorInterface{
 
     @Override
     public int countByUserId(Long userId) {
-        return storeRepository.countByUserId(userId);
+        return storeRepository.countByUserIdAndIsDeletedFalse(userId);
     }
 
     @Override

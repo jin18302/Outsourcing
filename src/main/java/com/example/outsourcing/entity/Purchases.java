@@ -1,5 +1,6 @@
 package com.example.outsourcing.entity;
 
+import com.example.outsourcing.common.entity.BaseEntity;
 import com.example.outsourcing.common.status.PurchasesStatus;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -9,7 +10,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(name = "purchases")
 @NoArgsConstructor
-public class Purchases {
+public class Purchases extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

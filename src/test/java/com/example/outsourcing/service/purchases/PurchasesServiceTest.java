@@ -14,12 +14,15 @@ import com.example.outsourcing.service.menu.MenuConnectorInterface;
 import com.example.outsourcing.service.store.StoreConnectorInterface;
 import com.example.outsourcing.service.user.UserConnectorInterface;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.util.ReflectionTestUtils;
+
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -43,42 +46,38 @@ class PurchasesServiceTest {
     @Mock
     UserConnectorInterface userConnectorInterface;
 
+    User user = new User();
+    Store store = Store.from(user, "이수진", "가게", "00:00", "23:59", 10000);
+    Menu menu = Menu.from(store, "집밥", 15000L);
+    Purchases savePurchases = new Purchases(store, menu, menu.getPrice(), user, PurchasesStatus.주문요청);
+
+    Long userId = 1L;
+    Long storeId = 1L;
+    Long menuId = 1L;
+    Long purchasesId = 1L;
+
+
+    @BeforeEach
+    void setUp() {
+        ReflectionTestUtils.setField(menu,"id", menuId);
+        ReflectionTestUtils.setField(user,"id", userId);
+        ReflectionTestUtils.setField(store,"id", storeId);
+        ReflectionTestUtils.setField(savePurchases, "id", purchasesId);
+    }
 
     @Test
     void 주문_요청_성공(){
         //given
-
-        User user = new User();
-        Long userId = 1L;
-        ReflectionTestUtils.setField(user,"id", userId);
-
-        Long storeId = 1L;
-
-        Store store = Store.from(user, "이수진", "가게", "00:00", "23:59", 10000);
-        ReflectionTestUtils.setField(store,"id", storeId);
-
-        Long menuId = 1L;
-        Menu menu = Menu.from(store, "집밥", 15000L);
-        ReflectionTestUtils.setField(menu,"id", menuId);
-
-
-        AddPurchasesRequest request = AddPurchasesRequest.from(userId, storeId, menuId);
-
-
-        Long purchasesId = 1L;
-        Purchases savePurchases = new Purchases(store, menu, menu.getPrice(), user, PurchasesStatus.주문요청);
-        ReflectionTestUtils.setField(savePurchases, "id", purchasesId);
-
+        AddPurchasesRequest request = AddPurchasesRequest.from(storeId, menuId, userId);
         PurchasesResponse response = PurchasesResponse.from(savePurchases);
 
-
-        //when
         when(storeConnectorInterface.findById(storeId)).thenReturn(store);
         when(menuConnectorInterface.findById(menuId)).thenReturn(menu);
         when(userConnectorInterface.findById(userId)).thenReturn(user);
         when(purchasesConnectorInterface.save(any(Purchases.class))).thenReturn(savePurchases);
 
-       PurchasesResponse actualResponse = purchasesService.createPurchases(request, userId);
+        //when
+        PurchasesResponse actualResponse = purchasesService.createPurchases(request, userId);
 
         //then
         assertEquals(response.getTotalPrice(),actualResponse.getTotalPrice());
@@ -88,7 +87,32 @@ class PurchasesServiceTest {
 
 
     @Test
-    void
+    void 가게별_주문내역_확인(){
+
+        PurchasesResponse response = PurchasesResponse.from(savePurchases);
+
+        //given
+        List<Purchases> responseList = List.of(savePurchases, savePurchases, savePurchases);
+
+        when(storeConnectorInterface.findById(storeId)).thenReturn(store);
+        when(purchasesConnectorInterface.findAllByStoreId(storeId)).thenReturn(responseList);
+
+
+        //when
+        List<PurchasesResponse> actualResponseList = purchasesService.getStorePurchases(userId, storeId);
+
+        //then
+        Assertions.assertEquals(actualResponseList.get(0).getTotalPrice(), responseList.get(0).getTotalPrice());
+        Assertions.assertEquals(responseList.get(0).getPurchasesStatus().toString(), actualResponseList.get(0).getPurchasesStatus());
+
+        Assertions.assertEquals(actualResponseList.get(1).getTotalPrice(), responseList.get(1).getTotalPrice());
+        Assertions.assertEquals(responseList.get(1).getPurchasesStatus().toString(), actualResponseList.get(1).getPurchasesStatus());
+
+
+        Assertions.assertEquals(actualResponseList.get(2).getTotalPrice(), responseList.get(2).getTotalPrice());
+        Assertions.assertEquals(responseList.get(2).getPurchasesStatus().toString(), actualResponseList.get(2).getPurchasesStatus());
+
+    }
 
 
 }
