@@ -16,6 +16,6 @@ public class UserResponse{
     }
 
     public static UserResponse from(User user){
-        return new UserResponse();
+        return new UserResponse(user.getId(), user.getEmail(), user.getName());
     }
 }
