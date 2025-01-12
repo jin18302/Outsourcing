@@ -41,6 +41,10 @@ public class ReviewConnector implements ReviewConnectorInterface {
     );
     }
 
+    public boolean existsByPurchasesId(Long purchasesId) {
+        return reviewRepository.existsByPurchasesId(purchasesId);
+    }
+
     public void delete(Review review) {
         reviewRepository.delete(review);
     }

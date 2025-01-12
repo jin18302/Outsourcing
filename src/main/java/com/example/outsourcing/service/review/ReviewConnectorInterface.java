@@ -14,6 +14,8 @@ public interface ReviewConnectorInterface {
 
     Page<Review> findReviewByStoreId(Long storeId, int startRating, int endRating, Pageable page);
 
+    boolean existsByPurchasesId(Long purchasesId);
+
     void delete(Review review);
 
 }

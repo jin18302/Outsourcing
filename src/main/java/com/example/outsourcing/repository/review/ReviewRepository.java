@@ -25,5 +25,7 @@ public interface ReviewRepository extends JpaRepository<Review, Long>{
                                      @Param("endRating")  int endRating,
                                      Pageable pageable);
 
+    @Query("SELECT COUNT(r) > 0 FROM Review r WHERE r.purchases.id = :purchasesId")
+    boolean existsByPurchasesId(@Param("purchasesId") Long purchasesId);
 
 }
