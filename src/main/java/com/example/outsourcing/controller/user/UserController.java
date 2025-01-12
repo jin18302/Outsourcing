@@ -2,10 +2,9 @@ package com.example.outsourcing.controller.user;
 
 import com.example.outsourcing.dto.user.request.UserChangePasswordRequest;
 import com.example.outsourcing.dto.user.request.UserChangeProfileRequest;
-import com.example.outsourcing.dto.user.request.UserDeleteRequest;
 import com.example.outsourcing.dto.user.response.UserResponse;
 import com.example.outsourcing.service.user.UserService;
-import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -27,18 +26,18 @@ public class UserController {
     @PatchMapping("/users")
     public ResponseEntity<UserResponse> updateProfile(
             @RequestAttribute("userId") Long userId,
-            @RequestBody UserChangeProfileRequest request
+            @Valid @RequestBody UserChangeProfileRequest request
     ) {
         return ResponseEntity.ok(userService.updateProfile(userId, request));
     }
 
     @PatchMapping("/users/password")
-    public ResponseEntity<Void> updatePassword(
+    public ResponseEntity<UserResponse> updatePassword(
             @RequestAttribute("userId") Long userId,
-            @RequestBody UserChangePasswordRequest request
+            @Valid @RequestBody UserChangePasswordRequest request
     ) {
-        userService.updatePassword(userId, request);
-        return ResponseEntity.ok().build();
+
+        return ResponseEntity.ok(userService.updatePassword(userId, request));
     }
 
     @DeleteMapping("/users")
