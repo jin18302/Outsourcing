@@ -9,11 +9,11 @@ import lombok.Getter;
 @Getter
 public class AddMenuRequest{
 
-    @NotBlank
+    @NotNull
     Long storeId;
     @NotBlank
     String name;
-    @NotBlank
+    @NotNull
     Long price;
 
     private AddMenuRequest(Long storeId, String name, Long price) {

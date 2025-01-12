@@ -4,20 +4,20 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 
 @Getter
 public class UpdateReviewRequest {
 
-    @NotBlank
+    @NotNull
     private final Long reviewId;
 
     private final String contents;
 
-    @Min(value = 0)
+    @Min(value = 1)
     @Max(value = 5)
-    private final int rating;
+    private final Integer rating;
 
     private UpdateReviewRequest(Long reviewId, String contents, int rating) {
         this.reviewId = reviewId;
