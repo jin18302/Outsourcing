@@ -19,21 +19,23 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalTime;
+import java.util.List;
+import java.util.Objects;
 
 @Service
 @Transactional
 @RequiredArgsConstructor
 public class PurchasesService {
 
-    private final PurchasesConnectorInterface PurchasesConnectorInterface;
-    private final MenuConnectorInterface MenuConnectorInterface;
-    private final StoreConnectorInterface StoreConnectorInterface;
-    private final UserConnectorInterface UserConnectorInterface;
+    private final PurchasesConnectorInterface purchasesConnectorInterface;
+    private final MenuConnectorInterface menuConnectorInterface;
+    private final StoreConnectorInterface storeConnectorInterface;
+    private final UserConnectorInterface userConnectorInterface;
 
     @PurchasesLog
     public PurchasesResponse createPurchases(AddPurchasesRequest request, Long userId) {
 
-        Store store = StoreConnectorInterface.findById(request.getStoreId());
+        Store store = storeConnectorInterface.findById(request.getStoreId());
 
         LocalTime now = LocalTime.now();
 
@@ -45,7 +47,7 @@ public class PurchasesService {
             throw new InvalidRequestException("영업시간이 종료되었습니다");
         }
 
-        Menu menu = MenuConnectorInterface.findById(request.getMenuId());
+        Menu menu = menuConnectorInterface.findById(request.getMenuId());
 
         Long totalPrice = menu.getPrice();//
 
@@ -53,11 +55,11 @@ public class PurchasesService {
             throw new InvalidRequestException("최소주문 금액을 만족하지 않아 주문 할 수 없습니다");
         }
 
-        User user = UserConnectorInterface.findById(userId);
+        User user = userConnectorInterface.findById(userId);
 
         Purchases purchases = new Purchases(store, menu, totalPrice, user, PurchasesStatus.주문요청);
 
-        Purchases savePurchases = PurchasesConnectorInterface.save(purchases);
+        Purchases savePurchases = purchasesConnectorInterface.save(purchases);
 
         return PurchasesResponse.from(savePurchases);
 
@@ -66,7 +68,7 @@ public class PurchasesService {
     @PurchasesLog
     public PurchasesResponse cancelPurchasesByUsers(Long userId, Long purchasesId) {
 
-        Purchases purchases = PurchasesConnectorInterface.findById(purchasesId);
+        Purchases purchases = purchasesConnectorInterface.findById(purchasesId);
 
         Long ownerId = purchases.getUser().getId();
 
@@ -82,7 +84,7 @@ public class PurchasesService {
     @PurchasesLog
     public PurchasesResponse changePurchasesByOwner(Long userId, UpdatePurchasesRequest request) {
 
-        Purchases purchases = PurchasesConnectorInterface.findById(request.getPurchasesId());
+        Purchases purchases = purchasesConnectorInterface.findById(request.getPurchasesId());
         Long ownerId = purchases.getStore().getUser().getId();
 
         if (!userId.equals(ownerId)) {
@@ -94,5 +96,32 @@ public class PurchasesService {
         purchases.updateOrderStatus(status);
 
         return PurchasesResponse.from(purchases);
+    }
+
+    public List<PurchasesResponse> getStorePurchases(Long userId, Long storeId) {
+
+        Store store = storeConnectorInterface.findById(storeId);
+
+        if (!Objects.equals(store.getUser().getId(), userId)) {
+            throw new UnauthorizedException("타 가게의 주문내역은 볼 수 없습니다");
+        }
+
+        List<Purchases> storeList = purchasesConnectorInterface.findAllByStoreId(storeId);
+
+        return storeList
+                .stream()
+                .map(PurchasesResponse::from)
+                .toList();
+
+    }
+
+    public List<PurchasesResponse> getUserPurchases(Long userId) {
+
+        List<Purchases> storeList = purchasesConnectorInterface.findAllByUserId(userId);
+
+        return storeList
+                .stream()
+                .map(PurchasesResponse::from)
+                .toList();
     }
 }
