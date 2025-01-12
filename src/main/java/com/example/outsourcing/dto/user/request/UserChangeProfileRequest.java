@@ -7,9 +7,8 @@ import lombok.Getter;
 
 @Getter
 public class UserChangeProfileRequest{
-    @NotBlank
+
     private final String name;
-    @NotBlank
     private final String address;
 
     private UserChangeProfileRequest(String name, String address) {
