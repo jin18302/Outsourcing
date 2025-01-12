@@ -1,5 +1,6 @@
 package com.example.outsourcing.entity;
 
+import com.example.outsourcing.common.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -8,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Table(name = "reviews")
 @Getter
 @NoArgsConstructor
-public class Review {
+public class Review extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -39,7 +40,6 @@ public class Review {
         this.contents = contents;
         this.rating=rating;
     }
-
 
     public void updateContents(String contents) {
         this.contents = contents;
