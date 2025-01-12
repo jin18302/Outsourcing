@@ -6,7 +6,6 @@ import com.example.outsourcing.common.exception.NotFoundException;
 import com.example.outsourcing.dto.auth.request.SignupRequest;
 import com.example.outsourcing.dto.store.request.StoreRequest;
 import com.example.outsourcing.dto.store.response.StoreResponse;
-import com.example.outsourcing.dto.store.response.StoreSaveResponse;
 import com.example.outsourcing.entity.Store;
 import com.example.outsourcing.entity.User;
 import com.example.outsourcing.service.user.UserConnectorInterface;
@@ -63,7 +62,7 @@ public class StoreServiceTest {
         Mockito.when(storeConnectorInterface.countByUserId(userId)).thenReturn(0);
         Mockito.when(storeConnectorInterface.save(Mockito.any(Store.class))).thenReturn(savedStore);
 
-        StoreSaveResponse response = storeService.create(userId, request);
+        StoreResponse response = storeService.create(userId, request);
 
         // then
         assertEquals(savedStore.getId(), response.getId());
