@@ -29,7 +29,7 @@ public class StoreService {
     private final StoreConnectorInterface storeConnectorInterface;
 
     @Transactional
-    public StoreSaveResponse create(Long userId, StoreRequest request) {
+    public StoreResponse create(Long userId, StoreRequest request) {
 
         int storeCount = storeConnectorInterface.countByUserId(userId);
 
@@ -48,7 +48,7 @@ public class StoreService {
                 request.getMinAmount());
         Store savedStore = storeConnectorInterface.save(newStore);
 
-        return StoreSaveResponse.from(savedStore);
+        return StoreResponse.from(savedStore);
     }
 
     public StoreResponse findById(Long storeId) {
