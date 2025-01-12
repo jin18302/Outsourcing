@@ -3,6 +3,9 @@ package com.example.outsourcing.controller.search;
 import com.example.outsourcing.dto.popSearch.response.PopSearchResponse;
 import com.example.outsourcing.dto.search.response.SearchResponse;
 import com.example.outsourcing.service.search.SearchService;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -18,7 +21,10 @@ public class SearchController {
     private final SearchService searchService;
 
     @GetMapping
-    public ResponseEntity<Page<SearchResponse>> searchStoreAndMenu(@RequestParam(value="keyword",required=true) String keyword, @RequestParam(value="pageNumber",required=false,defaultValue="1") int pageNumber){
+    public ResponseEntity<Page<SearchResponse>> searchStoreAndMenu(
+            @Valid @RequestParam(value="keyword" )
+            @NotBlank(message="검색어는 빈값일 수 없습니다.") String keyword,
+            @RequestParam(value="pageNumber",required=false,defaultValue="1") int pageNumber){
         Page<SearchResponse> result = searchService.searchStoreAndMenu(keyword, pageNumber);
         return new ResponseEntity<>(result,HttpStatus.OK);
     }
