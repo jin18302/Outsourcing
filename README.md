@@ -12,51 +12,51 @@
 ```mermaid
 erDiagram
     USERS {
-        INT ID PK
-        STRING EMAIL UNIQUE
-        STRING NAME
-        STRING PASSWORD
-        STRING ADDRESS
-        BOOLEAN DELETED
-        STRING USER_ROLE
+        ID PK
+        EMAIL UNIQUE
+        NAME
+        PASSWORD
+        ADDRESS
+        DELETED
+        USER_ROLE
     }
     STORE {
-        INT ID PK
-        INT USER_ID FK
-        STRING NAME
-        STRING ADDRESS
-        BOOLEAN DELETED
-        STRING OPEN
-        STRING CLOSE
-        INT MIN_AMOUNT
+        ID PK
+        USER_ID FK
+        NAME
+        ADDRESS
+        DELETED
+        OPEN
+        CLOSE
+        MIN_AMOUNT
     }
     MENU {
-        INT ID PK
-        INT STORE_ID FK
-        STRING NAME
-        INT PRICE
+        ID PK
+        STORE_ID FK
+        NAME
+        PRICE
     }
     PURCHASES {
-        INT ID PK
-        INT MENU_ID FK
-        INT STORE_ID FK
-        STRING STATUS
-        INT TOTAL_PRICE
-        INT USER_ID FK
+        ID PK
+        MENU_ID FK
+        STORE_ID FK
+        STATUS
+        TOTAL_PRICE
+        USER_ID FK
     }
     REVIEW {
-        INT ID PK
-        INT STORE_ID FK
-        INT ORDER_ID FK
-        INT USER_ID FK
-        STRING CONTENTS
-        INT RATING
+        ID PK
+        STORE_ID FK
+        ORDER_ID FK
+        USER_ID FK
+        CONTENTS
+        RATING
     }
     POPSEARCH {
-        INT ID PK
-        STRING KEYWORD
-        INT RANKINGCOUNT
-        STRING SEARCH_DATETIME
+        ID PK
+        KEYWORD
+        RANKINGCOUNT
+        SEARCH_DATETIME
     }
 
     USERS ||--o{ STORE : "manages"
@@ -66,5 +66,3 @@ erDiagram
     PURCHASES ||--o{ REVIEW : "generates"
     USERS ||--o{ PURCHASES : "places"
     USERS ||--o{ REVIEW : "writes"
-
-
