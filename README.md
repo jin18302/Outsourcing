@@ -1,68 +1,30 @@
 ## 프로젝트 설명
 배달어플리케이션의 기본적인 기능들을 구현한 프로젝트입니다
 
+## 역할 
+- 한성우
+  jwt를 사용한 회원가입 및 로그인 구현
+
+- 이우진
+  가게, 유저 crud 구현 
+
+- 정영균
+  리뷰 crud, 검색기능 구현
+
+- 이수진
+  메뉴, 주문 crud구현 
+
 ## 개발환경
+```intelij```  ```jdk17``` ```radis```
 
 
-## 사용기술
+## API
+
+
+
+## 와이어프레임
 
 
 ## ERD
 
-```mermaid
-erDiagram
-    USERS {
-        ID
-        EMAIL
-        NAME
-        PASSWORD
-        ADDRESS
-        DELETED
-        USER_ROLE
-    }
-    STORE {
-        ID
-        USER_ID
-        NAME
-        ADDRESS
-        DELETED
-        OPEN
-        CLOSE
-        MIN_AMOUNT
-    }
-    MENU {
-        ID
-        STORE_ID
-        NAME
-        PRICE
-    }
-    PURCHASES {
-        ID
-        MENU_ID
-        STORE_ID
-        STATUS
-        TOTAL_PRICE
-        USER_ID
-    }
-    REVIEW {
-        ID
-        STORE_ID
-        ORDER_ID
-        USER_ID
-        CONTENTS
-        RATING
-    }
-    POPSEARCH {
-        ID
-        KEYWORD
-        RANKINGCOUNT
-        SEARCH_DATETIME
-    }
-
-    USERS ||--o{ STORE : "manages"
-    STORE ||--o{ MENU : "provides"
-    MENU ||--o{ PURCHASES : "contains"
-    STORE ||--o{ REVIEW : "has"
-    PURCHASES ||--o{ REVIEW : "generates"
-    USERS ||--o{ PURCHASES : "places"
-    USERS ||--o{ REVIEW : "writes"
+  
