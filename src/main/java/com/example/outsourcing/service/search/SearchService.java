@@ -50,8 +50,7 @@ public class SearchService {
     }
 
     /*1시간 마다 in memory db에 있는 데이터를 mysql db로 저장 후 in memory db를 비웁니다.*/
-    //@Scheduled(fixedRate = 3600000)
-    @Scheduled(fixedRate=60000)
+    @Scheduled(fixedRate = 3600000)
     public void saveAllRedisTodb() {
         List<PopSearchResponse> popSearchResponse = popSearchResponseList();
         popSearchConnectorInterface.saveAll(PopSearch.from(popSearchResponse));
