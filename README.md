@@ -12,46 +12,59 @@
 ```mermaid
 erDiagram
     USERS {
-        BIGINT ID PK
-        CHAR EMAIL UNIQUE
-        CHAR NAME
-        CHAR PASSWORD
-        CHAR ADDRESS
+        INT ID PK
+        STRING EMAIL UNIQUE
+        STRING NAME
+        STRING PASSWORD
+        STRING ADDRESS
         BOOLEAN DELETED
-        CHAR USER_ROLE
+        STRING USER_ROLE
     }
     STORE {
-        BIGINT ID PK
-        BIGINT USER_ID FK
-        CHAR NAME
-        CHAR ADDRESS
+        INT ID PK
+        INT USER_ID FK
+        STRING NAME
+        STRING ADDRESS
         BOOLEAN DELETED
-        LOCALTIME OPEN
-        LOCALTIME CLOSE
+        STRING OPEN
+        STRING CLOSE
         INT MIN_AMOUNT
     }
     MENU {
-        BIGINT ID PK
-        BIGINT STORE_ID FK
-        CHAR NAME
-        BIGINT PRICE
+        INT ID PK
+        INT STORE_ID FK
+        STRING NAME
+        INT PRICE
     }
     PURCHASES {
-        BIGINT ID PK
-        BIGINT MENU_ID FK
-        BIGINT STORE_ID FK
-        CHAR STATUS
-        BIGINT TOTAL_PRICE
-        BIGINT USER_ID FK
+        INT ID PK
+        INT MENU_ID FK
+        INT STORE_ID FK
+        STRING STATUS
+        INT TOTAL_PRICE
+        INT USER_ID FK
     }
     REVIEW {
-        BIGINT ID PK
-        BIGINT STORE_ID FK
-        BIGINT ORDER_ID FK
-        BIGINT USER_ID FK
-        CHAR CONTENTS
+        INT ID PK
+        INT STORE_ID FK
+        INT ORDER_ID FK
+        INT USER_ID FK
+        STRING CONTENTS
         INT RATING
     }
     POPSEARCH {
-        BIGINT
+        INT ID PK
+        STRING KEYWORD
+        INT RANKINGCOUNT
+        STRING SEARCH_DATETIME
+    }
+
+    USERS ||--o{ STORE : "manages"
+    STORE ||--o{ MENU : "provides"
+    MENU ||--o{ PURCHASES : "contains"
+    STORE ||--o{ REVIEW : "has"
+    PURCHASES ||--o{ REVIEW : "generates"
+    USERS ||--o{ PURCHASES : "places"
+    USERS ||--o{ REVIEW : "writes"
+
 
