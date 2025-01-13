@@ -12,10 +12,11 @@ import java.util.List;
 @RequiredArgsConstructor
 public class PopSearchConnector implements PopSearchConnectorInterface {
     private final PopSearchRepository popSearchRepository;
+    private final PopSearchBatchInsert popSearchBatchInsert;
 
     @Override
-    public List<PopSearch> saveAll(List<PopSearch> popSearchList){
-        return popSearchRepository.saveAll(popSearchList);
+    public void saveAll(List<PopSearch> popSearchList){
+        popSearchBatchInsert.saveAll(popSearchList);
     }
 
     @Override
