@@ -26,5 +26,6 @@ https://www.notion.so/teamsparta/16c2dc3ef51481e89a3cc179a33ed8f4?v=16c2dc3ef514
 
 
 ## ERD
+https://github.com/jin18302/Outsourcing/issues/1#issue-2783128073
 
   
