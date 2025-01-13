@@ -3,7 +3,7 @@ package com.example.outsourcing.service.search;
 import com.example.outsourcing.dto.popSearch.response.PopSearchResponse;
 import com.example.outsourcing.dto.search.response.SearchResponse;
 import com.example.outsourcing.entity.PopSearch;
-import com.example.outsourcing.service.menu.MenuConnectorInterface;
+import com.example.outsourcing.service.store.StoreConnectorInterface;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -23,8 +23,8 @@ import java.util.Set;
 @Service
 @RequiredArgsConstructor
 public class SearchService {
-    private final MenuConnectorInterface menuConnectorInterface;
-    private final RedisTemplate<String, String> redisTemplate;
+    private final StoreConnectorInterface storeConnectorInterface;
+    private final RedisConnectorInterface redisConnectorInterface;
     private final PopSearchConnectorInterface popSearchConnectorInterface;
 
     public Page<SearchResponse> searchStoreAndMenu(String keyword, int pageNumber) {
@@ -35,15 +35,15 @@ public class SearchService {
                 Sort.by(Sort.Order.asc("name")));
 
 
-        ZSetOperations<String, String> zSetOperations = redisTemplate.opsForZSet();
+        ZSetOperations<String, String> zSetOperations = redisConnectorInterface.opsForZSet();
         zSetOperations.incrementScore("searchRanking", keyword, 1);
 
-        return menuConnectorInterface.findStoreAndMenu(keyword, page);
+        return storeConnectorInterface.findStoreAndMenu(keyword, page);
 
     }
 
     public List<PopSearchResponse> popSearchResponseList() {
-        ZSetOperations<String, String> zSetOperation = redisTemplate.opsForZSet();
+        ZSetOperations<String, String> zSetOperation = redisConnectorInterface.opsForZSet();
         Set<ZSetOperations.TypedTuple<String>> searchRangking = zSetOperation.reverseRangeWithScores("searchRanking", 0, 9);
         return PopSearchResponse.from(searchRangking);
 
@@ -54,7 +54,7 @@ public class SearchService {
     public void saveAllRedisTodb() {
         List<PopSearchResponse> popSearchResponse = popSearchResponseList();
         popSearchConnectorInterface.saveAll(PopSearch.from(popSearchResponse));
-        redisTemplate.delete("searchRanking");
+        redisConnectorInterface.delete("searchRanking");
     }
 
     public List<PopSearchResponse> findPopSearchByDay(){
