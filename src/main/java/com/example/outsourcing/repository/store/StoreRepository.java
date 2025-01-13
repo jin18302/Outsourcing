@@ -1,5 +1,6 @@
 package com.example.outsourcing.repository.store;
 
+import com.example.outsourcing.dto.search.response.SearchResponse;
 import com.example.outsourcing.entity.Store;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -28,5 +29,12 @@ public interface StoreRepository extends JpaRepository<Store, Long> {
     @Query("SELECT s FROM Store s WHERE s.name LIKE CONCAT('%', :name, '%') AND s.isDeleted = false")
     Page<Store> findAllByName(@Param("name") String name, Pageable pageable);
 
+    @Query(
+            "SELECT DISTINCT new com.example.outsourcing.dto.search.response.SearchResponse(s.id,s.name,s.address) " +
+                    "FROM Store s INNER JOIN Menu m ON m.store.id = s.id " +
+                    "WHERE m.name LIKE %:KEYWORD% AND m.isDelete = false " +
+                    "OR s.name LIKE %:KEYWORD% AND s.isDeleted = false"
+    )
+    Page<SearchResponse> findStoreAndMenu(@Param("KEYWORD") String Keyword, Pageable pageable);
 
 }

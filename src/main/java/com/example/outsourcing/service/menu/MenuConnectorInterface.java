@@ -14,6 +14,4 @@ public interface MenuConnectorInterface {
     Menu findById(Long id);
 
     List<Menu> findByStoreId(Long storeId);
-
-    Page<SearchResponse> findStoreAndMenu(String keyword, Pageable page);
 }

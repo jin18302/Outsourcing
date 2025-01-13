@@ -1,6 +1,7 @@
 package com.example.outsourcing.repository.store;
 
 import com.example.outsourcing.common.exception.NotFoundException;
+import com.example.outsourcing.dto.search.response.SearchResponse;
 import com.example.outsourcing.entity.Store;
 import com.example.outsourcing.service.store.StoreConnectorInterface;
 import lombok.RequiredArgsConstructor;
@@ -51,6 +52,11 @@ public class StoreConnector implements StoreConnectorInterface{
     @Override
     public Optional<Object> findByIdAndIsDeletedFalse(Long storeId) {
         return Optional.empty();
+    }
+
+    @Override
+    public Page<SearchResponse> findStoreAndMenu(String Keyword, Pageable pageable){
+        return storeRepository.findStoreAndMenu(Keyword,pageable);
     }
 
 }

@@ -32,8 +32,5 @@ public class MenuConnector implements MenuConnectorInterface {
         return menuRepository.findByStoreId(storeId);
     }
 
-    @Override
-    public Page<SearchResponse> findStoreAndMenu(String Keyword, Pageable pageable){
-        return menuRepository.findStoreAndMenu(Keyword,pageable);
-    }
+
 }

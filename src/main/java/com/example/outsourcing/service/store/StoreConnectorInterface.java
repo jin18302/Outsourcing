@@ -1,5 +1,6 @@
 package com.example.outsourcing.service.store;
 
+import com.example.outsourcing.dto.search.response.SearchResponse;
 import com.example.outsourcing.entity.Store;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -22,4 +23,6 @@ public interface StoreConnectorInterface {
     Page<Store> findAllByName(String name, Pageable pageable);
 
     Optional<Object> findByIdAndIsDeletedFalse(Long storeId);
+
+    Page<SearchResponse> findStoreAndMenu(String keyword, Pageable page);
 }
