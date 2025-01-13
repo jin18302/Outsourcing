@@ -53,17 +53,5 @@ erDiagram
         INT RATING
     }
     POPSEARCH {
-        BIGINT ID PK
-        CHAR KEYWORD
-        INT RANKINGCOUNT
-        DATETIME SEARCH_DATETIME
-    }
-
-    USERS ||--o{ STORE : "manages"
-    STORE ||--o{ MENU : "provides"
-    MENU ||--o{ PURCHASES : "contains"
-    STORE ||--o{ REVIEW : "has"
-    PURCHASES ||--o{ REVIEW : "generates"
-    USERS ||--o{ PURCHASES : "places"
-    USERS ||--o{ REVIEW : "writes"
+        BIGINT
 
