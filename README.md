@@ -19,10 +19,10 @@
 
 
 ## API
-
-
+https://www.notion.so/teamsparta/16c2dc3ef51481e89a3cc179a33ed8f4?v=16c2dc3ef51481d78c59000c15cb791c
 
 ## 와이어프레임
+
 
 
 ## ERD
