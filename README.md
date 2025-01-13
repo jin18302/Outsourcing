@@ -9,7 +9,7 @@
 
 ## ERD
 
-
+```mermaid
 erDiagram
     USERS {
         BIGINT ID PK
