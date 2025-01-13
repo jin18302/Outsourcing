@@ -67,8 +67,3 @@ erDiagram
     USERS ||--o{ PURCHASES : "places"
     USERS ||--o{ REVIEW : "writes"
 
-
-## 와이어프레임
-
-
-## API명세서
