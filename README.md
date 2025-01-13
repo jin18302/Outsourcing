@@ -26,6 +26,7 @@ https://www.notion.so/teamsparta/16c2dc3ef51481e89a3cc179a33ed8f4?v=16c2dc3ef514
 
 
 ## ERD
+![배달앱 (13) (1)](https://github.com/user-attachments/assets/ea149329-d7e1-4075-9e3f-9f0b7f134d50)
 
 
   
