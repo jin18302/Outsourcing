@@ -12,8 +12,8 @@
 ```mermaid
 erDiagram
     USERS {
-        ID PK
-        EMAIL UNIQUE
+        ID
+        EMAIL
         NAME
         PASSWORD
         ADDRESS
@@ -21,8 +21,8 @@ erDiagram
         USER_ROLE
     }
     STORE {
-        ID PK
-        USER_ID FK
+        ID
+        USER_ID
         NAME
         ADDRESS
         DELETED
@@ -31,29 +31,29 @@ erDiagram
         MIN_AMOUNT
     }
     MENU {
-        ID PK
-        STORE_ID FK
+        ID
+        STORE_ID
         NAME
         PRICE
     }
     PURCHASES {
-        ID PK
-        MENU_ID FK
-        STORE_ID FK
+        ID
+        MENU_ID
+        STORE_ID
         STATUS
         TOTAL_PRICE
-        USER_ID FK
+        USER_ID
     }
     REVIEW {
-        ID PK
-        STORE_ID FK
-        ORDER_ID FK
-        USER_ID FK
+        ID
+        STORE_ID
+        ORDER_ID
+        USER_ID
         CONTENTS
         RATING
     }
     POPSEARCH {
-        ID PK
+        ID
         KEYWORD
         RANKINGCOUNT
         SEARCH_DATETIME
